@@ -1,0 +1,1731 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e9">
+  <title>Números ordinales hasta el vigésimo · Segundo grado</title>
+  <style>
+    :root {
+      --paper: #f4f1e9;
+      --paper-strong: #e9e4d9;
+      --surface: #fffdf8;
+      --ink: #1d2925;
+      --muted: #68746f;
+      --line: #d9ddd6;
+      --accent: #28705b;
+      --accent-dark: #1e5948;
+      --accent-soft: #dcebe5;
+      --danger: #a64739;
+      --danger-soft: #f5e3de;
+      --gold: #a8792c;
+      --shadow: 0 22px 60px -34px rgba(38, 55, 48, .34);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100dvh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 85% 5%, rgba(40,112,91,.1), transparent 28rem),
+        var(--paper);
+      font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font: inherit; color: inherit; }
+
+    button:focus-visible {
+      outline: 3px solid rgba(40,112,91,.25);
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: 22px 0 34px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 34px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      font-weight: 780;
+      letter-spacing: -.02em;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+      flex: 0 0 43px;
+      border: 1px solid rgba(40,112,91,.22);
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: rgba(255,253,248,.82);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+      font: 900 1rem/1 ui-monospace, "Cascadia Mono", monospace;
+    }
+
+    .brand-text { white-space: nowrap; }
+
+    .tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 4px;
+      padding: 5px;
+      border: 1px solid rgba(102,115,110,.16);
+      border-radius: 15px;
+      background: rgba(255,253,248,.68);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    .tab-button {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 760;
+      cursor: pointer;
+      transition: transform .22s var(--ease), color .22s var(--ease), background .22s var(--ease);
+    }
+
+    .tab-button:hover { color: var(--ink); background: #fff; }
+    .tab-button[aria-selected="true"] { color: #fff; background: var(--accent); }
+    .tab-button:active { transform: scale(.97); }
+
+    main { min-width: 0; }
+    .view { display: none; }
+    .view.active { display: block; animation: view-in .52s var(--ease) both; }
+
+    @keyframes view-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 820;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 24px;
+      height: 2px;
+      border-radius: 99px;
+      background: currentColor;
+      content: "";
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 13ch;
+      margin-bottom: 21px;
+      font-size: clamp(2.45rem, 5.5vw, 4.8rem);
+      line-height: .98;
+      letter-spacing: -.055em;
+      font-weight: 790;
+    }
+
+    .lead {
+      max-width: 42ch;
+      margin-bottom: 26px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      line-height: 1.58;
+    }
+
+    .learn-layout {
+      display: grid;
+      grid-template-columns: minmax(280px,.78fr) minmax(520px,1.22fr);
+      gap: clamp(38px,7vw,88px);
+      align-items: start;
+    }
+
+    .lesson-copy { position: sticky; top: 28px; padding-top: clamp(18px,5vh,60px); }
+
+    .objective {
+      max-width: 360px;
+      padding: 17px 19px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      color: #42504b;
+      background: rgba(255,253,248,.7);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .lesson-panel {
+      padding: clamp(23px,4vw,40px);
+      border: 1px solid rgba(102,115,110,.16);
+      border-radius: var(--radius-xl);
+      background: rgba(255,253,248,.88);
+      box-shadow: var(--shadow), inset 0 1px 0 #fff;
+    }
+
+    .lesson-panel h2 { margin-bottom: 10px; font-size: clamp(1.75rem,3vw,2.35rem); letter-spacing: -.04em; }
+    .panel-intro { max-width: 58ch; color: var(--muted); font-size: clamp(1.03rem,1.6vw,1.14rem); line-height: 1.62; }
+
+    .word-equation {
+      margin: 25px 0;
+      padding: 22px;
+      border: 1px solid rgba(40,112,91,.2);
+      border-radius: 18px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto minmax(150px,1.4fr);
+      align-items: center;
+      gap: 11px;
+      background: var(--accent-soft);
+    }
+
+    .word-equation + .word-equation { margin-top: -12px; }
+
+    .vigesimo-highlight {
+      margin: -12px 0 25px;
+      padding: 17px 20px;
+      border: 1px solid rgba(168,121,44,.3);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 17px;
+      color: #684b1d;
+      background: #f5ead2;
+    }
+
+    .vigesimo-symbol { font: 900 2rem/1 ui-monospace,"Cascadia Mono",monospace; }
+    .vigesimo-highlight strong { display: block; margin-bottom: 4px; font-size: 1.2rem; }
+    .vigesimo-highlight span:last-child { font-size: 1rem; line-height: 1.5; }
+
+    .word-piece,
+    .word-result {
+      min-height: 60px;
+      padding: 12px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: #fff;
+      font-size: clamp(1rem,1.5vw,1.12rem);
+      font-weight: 780;
+      line-height: 1.3;
+    }
+
+    .word-result { color: #fff; background: var(--accent); }
+    .operator { color: var(--accent); font: 900 1.3rem/1 ui-monospace,"Cascadia Mono",monospace; }
+
+    .word-banks { display: grid; grid-template-columns: 1.15fr .85fr; gap: 16px; }
+
+    .bank {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .bank h3 { margin-bottom: 13px; font-size: .95rem; letter-spacing: .07em; text-transform: uppercase; }
+    .bank-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+    .bank.units .bank-list { grid-template-columns: 1fr; }
+
+    .bank-item {
+      padding: 8px 9px;
+      border-radius: 9px;
+      display: flex;
+      justify-content: space-between;
+      gap: 9px;
+      color: #44524d;
+      background: var(--paper);
+      font-size: .95rem;
+      font-weight: 690;
+    }
+
+    .bank-item b { color: var(--accent); font: 800 .9rem/1.3 ui-monospace,"Cascadia Mono",monospace; }
+
+    .builder {
+      margin-top: 17px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .builder-top { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 16px; }
+    .builder-top h3 { margin: 0 0 4px; font-size: 1.38rem; letter-spacing: -.025em; }
+    .builder-top p { margin: 0; color: var(--muted); font-size: 1rem; }
+
+    .builder-row { margin-bottom: 13px; }
+    .builder-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: .86rem; font-weight: 780; letter-spacing: .06em; text-transform: uppercase; }
+    .choice-strip { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .choice-button {
+      min-width: 46px;
+      height: 43px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      font: 800 .94rem/1 ui-monospace,"Cascadia Mono",monospace;
+      cursor: pointer;
+      transition: transform .22s var(--ease), border-color .22s var(--ease), color .22s var(--ease), background .22s var(--ease);
+    }
+
+    .choice-button:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .choice-button.selected { border-color: var(--accent); color: #fff; background: var(--accent); }
+    .choice-button:active { transform: scale(.96); }
+
+    .builder-output {
+      min-height: 90px;
+      margin-top: 17px;
+      padding: 18px;
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      align-items: center;
+      gap: 18px;
+      color: #fff;
+      background: var(--ink);
+    }
+
+    .output-number { font: 900 2.2rem/1 ui-monospace,"Cascadia Mono",monospace; letter-spacing: -.07em; }
+    .output-word { font-size: clamp(1.1rem,2.5vw,1.55rem); font-weight: 770; letter-spacing: -.025em; }
+
+    .vigesimo-button {
+      margin-top: 10px;
+      min-height: 45px;
+      padding: 0 15px;
+      border: 1px solid rgba(168,121,44,.3);
+      border-radius: 12px;
+      color: #78561f;
+      background: #f5ead2;
+      font-weight: 760;
+      cursor: pointer;
+      transition: transform .22s var(--ease), background .22s var(--ease);
+    }
+
+    .vigesimo-button:hover { background: #edddb9; transform: translateY(-1px); }
+    .vigesimo-button:active { transform: scale(.97); }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(270px,.7fr) minmax(430px,1.3fr);
+      gap: clamp(32px,6vw,78px);
+      align-items: end;
+      margin: 20px 0 34px;
+    }
+
+    .section-heading h1 { margin: 0; max-width: 10ch; }
+    .section-intro { max-width: 55ch; margin: 0; color: var(--muted); font-size: 1.04rem; line-height: 1.65; }
+
+    .problems-layout {
+      display: grid;
+      grid-template-columns: minmax(0,1.35fr) minmax(275px,.65fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .problems-card,
+    .score-card,
+    .memory-panel,
+    .memory-side,
+    .table-practice-card,
+    .cards2-board-panel,
+    .cards2-side {
+      border: 1px solid rgba(102,115,110,.17);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      box-shadow: var(--shadow), inset 0 1px 0 #fff;
+    }
+
+    .problems-card { padding: clamp(23px,4vw,40px); }
+    .problem-list { display: grid; gap: 13px; }
+
+    .problem-item {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+    }
+
+    .problem-kicker { margin: 0 0 8px; color: var(--accent); font: 800 .72rem/1 ui-monospace,"Cascadia Mono",monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .problem-text { margin-bottom: 15px; color: #35433e; font-size: .96rem; line-height: 1.55; font-weight: 670; }
+    .answer-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+
+    .answer-option {
+      min-height: 62px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      display: grid;
+      grid-template-columns: 32px 1fr 24px;
+      align-items: center;
+      gap: 11px;
+      text-align: left;
+      background: #fff;
+      font-size: clamp(1rem,1.35vw,1.12rem);
+      font-weight: 720;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: transform .22s var(--ease), border-color .22s var(--ease), color .22s var(--ease), background .22s var(--ease);
+    }
+
+    .answer-option:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
+    .answer-option.correct { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-soft); }
+    .answer-option.wrong { border-color: var(--danger); color: var(--danger); background: var(--danger-soft); }
+    .answer-letter { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--paper); font: 800 .86rem/1 ui-monospace,"Cascadia Mono",monospace; }
+    .answer-mark { width: 22px; height: 22px; display: grid; place-items: center; }
+    .answer-feedback { min-height: 19px; margin: 10px 0 0; color: var(--muted); font-size: .76rem; line-height: 1.4; }
+    .answer-feedback.correct { color: var(--accent-dark); }
+    .answer-feedback.incorrect { color: var(--danger); }
+
+    .score-card {
+      min-height: 390px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 26px;
+      color: #fff;
+      background: var(--ink);
+    }
+
+    .score-card .eyebrow { color: #9dcbbb; }
+    .score-number { font: 900 clamp(3.2rem,7vw,5.6rem)/.9 ui-monospace,"Cascadia Mono",monospace; letter-spacing: -.08em; }
+    .score-number small { display: block; margin-top: 13px; color: #afbbb7; font: 700 .78rem/1.35 "Aptos","Segoe UI",sans-serif; letter-spacing: 0; }
+
+    .primary-button,
+    .secondary-button {
+      min-height: 48px;
+      padding: 0 17px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 770;
+      cursor: pointer;
+      transition: transform .24s var(--ease), border-color .24s var(--ease), background .24s var(--ease);
+    }
+
+    .primary-button { border: 1px solid var(--accent); color: #fff; background: var(--accent); }
+    .primary-button:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .secondary-button { border: 1px solid var(--line); background: #fff; }
+    .secondary-button:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .primary-button:active,.secondary-button:active { transform: scale(.97); }
+
+    .score-card .primary-button { width: 100%; border-color: #fff; color: var(--ink); background: #fff; }
+    .score-card .primary-button:hover { background: var(--accent-soft); }
+
+    .problem-celebration { display: none; text-align: center; }
+    .problem-celebration.visible { display: block; animation: celebration-in .7s cubic-bezier(.16,1.35,.3,1) both; }
+
+    @keyframes celebration-in {
+      from { opacity: 0; transform: scale(.58) rotate(-4deg); }
+      70% { opacity: 1; transform: scale(1.05) rotate(2deg); }
+      to { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    .celebration-art {
+      width: 190px;
+      height: 160px;
+      margin: 0 auto 6px;
+      background-image: url("recursos-numeros-ordinales/felicitacion.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: auto 160px;
+      filter: drop-shadow(0 15px 16px rgba(99,74,20,.14));
+    }
+
+    .problem-celebration h3 { margin-bottom: 4px; font-size: 1.25rem; }
+    .problem-celebration p { margin: 0; color: #b8c4bf; font-size: .8rem; line-height: 1.45; }
+    .practice-note { display: none; margin: 0; color: #b8c4bf; font-size: .82rem; line-height: 1.5; }
+    .practice-note.visible { display: block; }
+
+    .memory-layout {
+      display: grid;
+      grid-template-columns: minmax(0,1.45fr) minmax(250px,.55fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .memory-panel { padding: clamp(22px,4vw,38px); }
+    .memory-board-heading { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 15px; color: var(--muted); font-size: .76rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .memory-board { width: min(100%,760px); margin: 0 auto; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
+
+    .memory-slot { min-width: 0; aspect-ratio: 2.5 / 3.6; }
+    .memory-card {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 15px;
+      background: transparent;
+      perspective: 900px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .55s var(--ease), opacity .38s var(--ease);
+    }
+
+    .memory-card.flipped .card-inner,
+    .memory-card.matched .card-inner { transform: rotateY(180deg); }
+    .memory-card.matched .card-inner { transform: rotateY(180deg) scale(1); }
+    .memory-card:active .card-inner { transform: scale(.97); }
+    .memory-card.flipped:active .card-inner { transform: rotateY(180deg) scale(.97); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border: 1px solid rgba(102,115,110,.22);
+      border-radius: 15px;
+      backface-visibility: hidden;
+      box-shadow: 0 15px 28px -22px rgba(29,41,37,.55), inset 0 1px 0 rgba(255,255,255,.75);
+    }
+
+    .card-back {
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background:
+        linear-gradient(45deg,rgba(255,255,255,.08) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.08) 75%),
+        linear-gradient(45deg,rgba(255,255,255,.08) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.08) 75%),
+        var(--accent);
+      background-position: 0 0,8px 8px;
+      background-size: 16px 16px;
+      font: 900 clamp(1.6rem,4vw,2.5rem)/1 ui-monospace,"Cascadia Mono",monospace;
+    }
+
+    .card-back::before { position: absolute; inset: 9px; border: 1px solid rgba(255,255,255,.45); border-radius: 10px; content: ""; }
+
+    .card-front {
+      padding: 13px 10px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      transform: rotateY(180deg);
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .card-front.numeric { font: 900 clamp(2rem,4.8vw,3.25rem)/1 ui-monospace,"Cascadia Mono",monospace; }
+    .card-front.word { font-size: clamp(.96rem,1.85vw,1.18rem); font-weight: 790; line-height: 1.32; overflow-wrap: anywhere; }
+    .memory-card.matched .card-front { border-color: rgba(40,112,91,.5); background: var(--accent-soft); box-shadow: inset 0 0 0 3px rgba(40,112,91,.12); }
+    .card-corner { position: absolute; top: 8px; left: 9px; color: var(--accent); font: 800 .76rem/1 ui-monospace,"Cascadia Mono",monospace; }
+    .card-corner.bottom { top: auto; left: auto; right: 9px; bottom: 8px; transform: rotate(180deg); }
+    .matched-mark { position: absolute; top: 8px; right: 8px; width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--accent); }
+
+    .memory-side {
+      min-height: 360px;
+      padding: 27px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 26px;
+      color: #fff;
+      background: var(--ink);
+    }
+
+    .memory-side .eyebrow { color: #9dcbbb; }
+    .memory-side h2 { max-width: 9ch; margin-bottom: 12px; font-size: clamp(2rem,4vw,3rem); line-height: 1; letter-spacing: -.045em; }
+    .memory-side p { color: #bac5c1; font-size: .87rem; line-height: 1.58; }
+    .memory-progress { padding-top: 18px; border-top: 1px solid rgba(255,255,255,.16); }
+    .memory-progress-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: #c5cecb; font-size: .77rem; font-weight: 730; }
+    .progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.13); }
+    .progress-fill { height: 100%; border-radius: inherit; background: #9dcbbb; transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+    .memory-side .primary-button { width: 100%; border-color: #fff; color: var(--ink); background: #fff; }
+    .memory-side .primary-button:hover { background: var(--accent-soft); }
+    .memory-message { min-height: 42px; margin: 13px 0 0 !important; }
+    .memory-message.success { color: #b7dfd0; font-weight: 760; }
+
+    .time-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+    .time-metric { padding: 12px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: rgba(255,255,255,.05); }
+    .time-metric span { display: block; margin-bottom: 7px; color: #aebbb6; font-size: .67rem; font-weight: 760; letter-spacing: .06em; text-transform: uppercase; }
+    .time-metric b { font: 850 1.15rem/1 ui-monospace,"Cascadia Mono",monospace; }
+
+    .memory-celebration { display: none; text-align: center; }
+    .memory-celebration.visible { display: block; animation: celebration-in .7s cubic-bezier(.16,1.35,.3,1) both; }
+    .memory-celebration .celebration-art { width: 175px; height: 140px; background-size: auto 140px; }
+    .memory-celebration h3 { margin-bottom: 4px; font-size: 1.18rem; }
+    .memory-celebration p { margin: 0; color: #b8c4bf; font-size: .78rem; line-height: 1.45; }
+
+    .table-practice-card { min-width: 0; padding: clamp(23px,4vw,40px); }
+    .context-table-wrap { width: 100%; max-width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+    .context-table { width: 100%; min-width: 400px; border-collapse: collapse; }
+    .context-table caption { padding: 20px 22px; text-align: left; color: #fff; background: var(--ink); font-size: clamp(1.15rem,2vw,1.42rem); font-weight: 790; letter-spacing: -.025em; }
+    .context-table th,
+    .context-table td { padding: 12px 15px; border-bottom: 1px solid var(--line); text-align: left; font-size: clamp(.95rem,1.5vw,1.08rem); line-height: 1.35; }
+    .context-table th { color: var(--accent-dark); background: var(--accent-soft); font-size: .82rem; font-weight: 820; letter-spacing: .06em; text-transform: uppercase; }
+    .context-table tbody tr:nth-child(even) { background: #f8f6f0; }
+    .context-table tbody tr:last-child td { border-bottom: 0; }
+    .context-table td:first-child { color: #34433e; font-weight: 760; }
+    .context-table th:last-child,
+    .context-table td:last-child { text-align: right; }
+    .context-table td:last-child { color: var(--accent); font: 850 1rem/1.3 ui-monospace,"Cascadia Mono",monospace; }
+    .table-order-note { margin: 12px 0 0; padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 0 11px 11px 0; color: #40504a; background: var(--accent-soft); font-size: .92rem; font-weight: 700; line-height: 1.45; }
+    .table-order-note.shuffled { background: var(--paper); }
+    .table-question-list { margin-top: 18px; display: grid; gap: 13px; }
+
+    .cards2-layout {
+      display: grid;
+      grid-template-columns: minmax(0,1.45fr) minmax(270px,.55fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .cards2-board-panel { padding: clamp(22px,4vw,38px); }
+    .cards2-board-heading { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 16px; color: var(--muted); font-size: .78rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .cards2-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 10px; }
+
+    .number-choice-card {
+      position: relative;
+      min-width: 0;
+      min-height: 102px;
+      padding: 12px 8px;
+      overflow: hidden;
+      border: 1px solid rgba(102,115,110,.22);
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 15px 28px -24px rgba(29,41,37,.55), inset 0 1px 0 rgba(255,255,255,.8);
+      cursor: pointer;
+      transition: transform .28s var(--ease), border-color .28s var(--ease), color .28s var(--ease), background .28s var(--ease);
+    }
+
+    .number-choice-card::before { position: absolute; inset: 7px; border: 1px solid rgba(40,112,91,.1); border-radius: 11px; content: ""; pointer-events: none; }
+    .number-choice-card:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); transform: translateY(-2px); }
+    .number-choice-card:active:not(:disabled) { transform: scale(.97); }
+    .number-choice-card.solved { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-soft); box-shadow: inset 0 0 0 3px rgba(40,112,91,.12); }
+    .number-choice-card.wrong { border-color: var(--danger); color: var(--danger); background: var(--danger-soft); animation: wrong-shake .42s var(--ease) both; }
+    .number-choice-card:disabled { cursor: default; }
+    .number-choice-card .number-value { font: 900 clamp(1.65rem,3.4vw,2.45rem)/1 ui-monospace,"Cascadia Mono",monospace; letter-spacing: -.06em; }
+    .number-choice-card .solved-mark { position: absolute; top: 9px; right: 9px; width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--accent); }
+    .number-choice-card.wrong .solved-mark { background: var(--danger); }
+
+    @keyframes wrong-shake {
+      0%,100% { transform: translateX(0); }
+      30% { transform: translateX(-5px); }
+      65% { transform: translateX(5px); }
+    }
+
+    .cards2-side {
+      min-height: 520px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 25px;
+      color: #fff;
+      background: var(--ink);
+    }
+
+    .cards2-side .eyebrow { color: #9dcbbb; }
+    .cards2-instruction { margin-bottom: 10px; color: #b9c4c0; font-size: .96rem; line-height: 1.55; }
+    .cards2-prompt-label { display: block; margin: 18px 0 8px; color: #9dcbbb; font-size: .72rem; font-weight: 820; letter-spacing: .08em; text-transform: uppercase; }
+    .cards2-prompt { min-height: 76px; margin: 0; color: #fff; font-size: clamp(1.8rem,4vw,2.65rem); font-weight: 790; line-height: 1.04; letter-spacing: -.045em; overflow-wrap: anywhere; }
+    .cards2-feedback { min-height: 47px; margin: 13px 0 0; color: #bcc7c3; font-size: .88rem; line-height: 1.5; }
+    .cards2-feedback.correct { color: #b7dfd0; font-weight: 760; }
+    .cards2-feedback.incorrect { color: #f0b6ad; font-weight: 760; }
+    .cards2-progress { padding-top: 17px; border-top: 1px solid rgba(255,255,255,.16); }
+    .cards2-side .primary-button { width: 100%; border-color: #fff; color: var(--ink); background: #fff; }
+    .cards2-side .primary-button:hover { background: var(--accent-soft); }
+
+    .cards2-celebration { position: relative; display: none; text-align: center; isolation: isolate; }
+    .cards2-celebration.visible { display: block; animation: celebration-in .7s cubic-bezier(.16,1.35,.3,1) both; }
+    .cards2-celebration > *:not(.fireworks) { position: relative; z-index: 1; }
+    .cards2-celebration .celebration-art { width: 180px; height: 145px; background-size: auto 145px; }
+    .cards2-celebration h3 { margin-bottom: 4px; font-size: 1.25rem; }
+    .cards2-celebration p { margin: 0; color: #c2ccc8; font-size: .82rem; line-height: 1.45; }
+
+    .fireworks { position: absolute; inset: -22px -15px; z-index: 0; overflow: hidden; pointer-events: none; }
+    .fireworks span {
+      position: absolute;
+      left: 50%;
+      top: 58%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #e4bd70;
+      opacity: 0;
+      animation: firework-spark 1.55s var(--delay) var(--ease) infinite;
+    }
+    .fireworks span:nth-child(3n) { background: #9dcbbb; }
+    .fireworks span:nth-child(3n + 2) { background: #fff; }
+
+    @keyframes firework-spark {
+      0% { opacity: 0; transform: translate(-50%,-50%) scale(.2); }
+      18% { opacity: 1; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.1); }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(102,115,110,.18);
+      color: var(--muted);
+      font-size: .75rem;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media (max-width: 900px) {
+      .learn-layout,
+      .section-heading,
+      .problems-layout,
+      .memory-layout,
+      .cards2-layout { grid-template-columns: 1fr; }
+      .lesson-copy { position: static; padding-top: 8px; }
+      h1 { max-width: 16ch; }
+      .section-heading h1 { max-width: none; }
+      .score-card { min-height: 280px; display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+      .problem-celebration { grid-row: span 2; }
+      .memory-side { min-height: 260px; display: grid; grid-template-columns: 1fr 1fr; }
+      .memory-progress { grid-column: 1 / -1; }
+      .memory-side .primary-button { grid-column: 1 / -1; }
+      .cards2-side { min-height: 380px; }
+    }
+
+    @media (max-width: 660px) {
+      .app-shell { width: min(100% - 22px,1180px); padding-top: 12px; gap: 25px; }
+      .topbar { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .brand-text { display: none; }
+      .tabs { width: 100%; padding: 4px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 3px; }
+      .tab-button { min-height: 38px; padding: 0 9px; font-size: .82rem; }
+      .lesson-panel,.problems-card,.memory-panel,.table-practice-card,.cards2-board-panel { padding: 20px 17px; border-radius: 22px; }
+      .word-equation { grid-template-columns: 1fr; }
+      .operator { transform: rotate(90deg); }
+      .word-banks { grid-template-columns: 1fr; }
+      .bank.units .bank-list { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .builder-top { align-items: start; flex-direction: column; }
+      .builder-output { grid-template-columns: 78px 1fr; }
+      .answer-options { grid-template-columns: 1fr; }
+      .problem-item { padding: 16px; }
+      .score-card { min-height: 340px; display: flex; border-radius: 22px; }
+      .celebration-art { width: 160px; height: 135px; background-size: auto 135px; }
+      .memory-board { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+      .memory-slot { aspect-ratio: 2.4 / 3.3; }
+      .memory-side { display: flex; border-radius: 22px; }
+      .memory-progress { width: 100%; }
+      .context-table th,.context-table td { padding: 11px 12px; font-size: .9rem; }
+      .cards2-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
+      .number-choice-card { min-height: 82px; border-radius: 13px; }
+      .number-choice-card .number-value { font-size: 1.55rem; }
+      .cards2-side { min-height: 430px; padding: 23px; border-radius: 22px; }
+      footer { flex-direction: column; gap: 5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+    .authorship { max-width: 410px; margin: 18px 0 0; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; line-height: 1.48; letter-spacing: .01em; }
+    .authorship span { display: block; }
+    .authorship strong { color: var(--ink); font-weight: 850; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Números ordinales hasta el vigésimo, segundo grado">
+        <span class="brand-mark" aria-hidden="true">20.º</span>
+        <span class="brand-text">Números ordinales</span>
+      </div>
+      <nav class="tabs" aria-label="Secciones del juego" role="tablist">
+        <button class="tab-button" id="learn-tab" type="button" role="tab" aria-selected="true">Aprender</button>
+        <button class="tab-button" id="problems-tab" type="button" role="tab" aria-selected="false">Problemas</button>
+        <button class="tab-button" id="tables-tab" type="button" role="tab" aria-selected="false">Tablas</button>
+        <button class="tab-button" id="cards-tab" type="button" role="tab" aria-selected="false">Cartas</button>
+        <button class="tab-button" id="cards2-tab" type="button" role="tab" aria-selected="false">Cartas 2</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="view active" id="learn-view">
+        <div class="learn-layout">
+          <div class="lesson-copy">
+            <p class="eyebrow">Matemática · Segundo grado</p>
+            <h1>Números ordinales hasta el vigésimo</h1>
+            <p class="lead">Los números ordinales indican el lugar o la posición que ocupa una persona, un objeto o un acontecimiento dentro de un orden.</p>
+            <p class="objective"><strong>Propósito:</strong> identificar el lugar que ocupan objetos o personas en un orden definido utilizando números ordinales hasta el vigésimo.</p>
+            <p class="authorship"><span>Elaborado por: <strong>Alberto Jiménez Ruiz</strong></span><span>Asesor Regional de Matemática DRE-Cartag-DAP-2026</span></p>
+          </div>
+
+          <section class="lesson-panel" aria-labelledby="lesson-title">
+            <p class="eyebrow">Construcción de palabras</p>
+            <h2 id="lesson-title">Unimos dos vocablos</h2>
+            <p class="panel-intro">Del 11.º al 19.º unimos el décimo con una unidad ordinal. Si la unidad es cero, escribimos solamente décimo.</p>
+
+            <div class="word-equation" aria-label="Ejemplo: décimo más tercero es décimo tercero">
+              <span class="word-piece">décimo</span>
+              <span class="operator">+</span>
+              <span class="word-piece">tercero</span>
+              <span class="operator">=</span>
+              <span class="word-result">décimo tercero<br>13.º</span>
+            </div>
+
+            <div class="word-equation" aria-label="Ejemplo: décimo más octavo es décimo octavo">
+              <span class="word-piece">décimo</span>
+              <span class="operator">+</span>
+              <span class="word-piece">octavo</span>
+              <span class="operator">=</span>
+              <span class="word-result">décimo octavo<br>18.º</span>
+            </div>
+
+            <div class="vigesimo-highlight" aria-label="Veinte en notación ordinal se escribe vigésimo">
+              <span class="vigesimo-symbol">20.º</span>
+              <span><strong>vigésimo</strong>Representa la posición veinte y se escribe como un solo vocablo.</span>
+            </div>
+
+            <div class="word-banks">
+              <section class="bank">
+                <h3>Números ordinales clave</h3>
+                <div class="bank-list">
+                  <span class="bank-item"><b>10.º</b> décimo</span>
+                  <span class="bank-item"><b>20.º</b> vigésimo</span>
+                </div>
+              </section>
+              <section class="bank units">
+                <h3>Unidades ordinales</h3>
+                <div class="bank-list">
+                  <span class="bank-item"><b>1.º</b> primero</span>
+                  <span class="bank-item"><b>2.º</b> segundo</span>
+                  <span class="bank-item"><b>3.º</b> tercero</span>
+                  <span class="bank-item"><b>4.º</b> cuarto</span>
+                  <span class="bank-item"><b>5.º</b> quinto</span>
+                  <span class="bank-item"><b>6.º</b> sexto</span>
+                  <span class="bank-item"><b>7.º</b> séptimo</span>
+                  <span class="bank-item"><b>8.º</b> octavo</span>
+                  <span class="bank-item"><b>9.º</b> noveno</span>
+                </div>
+              </section>
+            </div>
+
+            <div class="builder">
+              <div class="builder-top">
+                <div><h3>Construye un ordinal</h3><p>Selecciona una decena y una unidad.</p></div>
+              </div>
+              <div class="builder-row">
+                <span class="builder-label">Decena</span>
+                <div class="choice-strip" id="tens-choices"></div>
+              </div>
+              <div class="builder-row">
+                <span class="builder-label">Unidad</span>
+                <div class="choice-strip" id="units-choices"></div>
+              </div>
+              <div class="builder-output" aria-live="polite">
+                <span class="output-number" id="builder-number">13.º</span>
+                <span class="output-word" id="builder-word">décimo tercero</span>
+              </div>
+              <button class="vigesimo-button" id="show-vigesimo" type="button">Mostrar el vigésimo · 20.º</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="problems-view">
+        <header class="section-heading">
+          <div><p class="eyebrow">Selección única</p><h1>Problemas</h1></div>
+          <p class="section-intro">Lee cada situación y analiza el orden. Dos ejercicios trabajan la escritura ordinal y uno presenta puntajes para identificar quién ocupa una posición determinada.</p>
+        </header>
+
+        <div class="problems-layout">
+          <section class="problems-card" aria-live="polite">
+            <div class="problem-list" id="problem-list"></div>
+          </section>
+          <aside class="score-card">
+            <div>
+              <p class="eyebrow">Resultado</p>
+              <div class="score-number"><span id="problem-score">0</span><small>respuestas correctas de 3</small></div>
+            </div>
+            <div class="problem-celebration" id="problem-celebration" role="status">
+              <div class="celebration-art" role="img" aria-label="Personaje sonriente con ambos pulgares arriba"></div>
+              <h3>¡Excelente trabajo!</h3>
+              <p>Resolviste correctamente toda la práctica.</p>
+            </div>
+            <p class="practice-note" id="practice-note">Revisa las respuestas señaladas y prueba con otros tres ejercicios.</p>
+            <button class="primary-button" id="new-problems" type="button">
+              Nueva práctica
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="tables-view">
+        <header class="section-heading">
+          <div><p class="eyebrow">Leer posiciones</p><h1>Tablas</h1></div>
+          <p class="section-intro">Cada pregunta indica si debes ordenar los resultados de mayor a menor o de menor a mayor. La dirección y la posición solicitadas cambian aleatoriamente.</p>
+        </header>
+
+        <div class="problems-layout">
+          <section class="table-practice-card" aria-live="polite">
+            <div class="context-table-wrap">
+              <table class="context-table">
+                <caption id="table-title">Tabla de posiciones</caption>
+                <thead><tr><th id="table-subject-heading">Participante</th><th id="table-metric-heading">Resultado</th></tr></thead>
+                <tbody id="table-body"></tbody>
+              </table>
+            </div>
+            <p class="table-order-note" id="table-order-note">Lee con atención la dirección indicada en cada pregunta antes de determinar las posiciones.</p>
+            <div class="table-question-list" id="table-question-list"></div>
+          </section>
+
+          <aside class="score-card">
+            <div>
+              <p class="eyebrow">Resultado</p>
+              <div class="score-number"><span id="table-score">0</span><small>respuestas correctas de 3</small></div>
+            </div>
+            <div class="problem-celebration" id="table-celebration" role="status">
+              <div class="celebration-art" role="img" aria-label="Personaje sonriente con ambos pulgares arriba"></div>
+              <h3>¡Excelente trabajo!</h3>
+              <p>Interpretaste correctamente toda la tabla.</p>
+            </div>
+            <p class="practice-note" id="table-practice-note">Revisa las respuestas y reinicia la práctica para trabajar con otra tabla.</p>
+            <button class="primary-button" id="new-table-practice" type="button">
+              Reiniciar práctica
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="cards-view">
+        <header class="section-heading">
+          <div><p class="eyebrow">Juego de memoria</p><h1>Cartas ordinales</h1></div>
+          <p class="section-intro">Voltea una carta numérica y otra con escritura ordinal. Si forman pareja, quedan abiertas; si no coinciden, vuelven a ocultarse.</p>
+        </header>
+
+        <div class="memory-layout">
+          <section class="memory-panel" aria-live="polite">
+            <div class="memory-board-heading"><span>Tablero mezclado</span><span>8 cartas · 4 parejas</span></div>
+            <div class="memory-board" id="memory-deck"></div>
+          </section>
+
+          <aside class="memory-side">
+            <div>
+              <p class="eyebrow">Cuatro parejas</p>
+              <h2>Encuentra las coincidencias.</h2>
+              <p>El reloj comienza al voltear la primera carta. Encuentra cada notación numérica y su escritura ordinal.</p>
+              <p class="memory-message" id="memory-message" role="status">Voltea la primera carta.</p>
+              <div class="time-metrics" aria-label="Tiempo de la partida">
+                <div class="time-metric"><span>Tiempo</span><b id="memory-time">00:00</b></div>
+                <div class="time-metric"><span>Récord</span><b id="memory-record">--:--</b></div>
+              </div>
+            </div>
+            <div class="memory-celebration" id="memory-celebration" role="status">
+              <div class="celebration-art" role="img" aria-label="Personaje sonriente con ambos pulgares arriba"></div>
+              <h3>¡Excelente trabajo!</h3>
+              <p>Completaste las cuatro parejas en <strong id="memory-final-time">00:00</strong>.</p>
+            </div>
+            <div class="memory-progress">
+              <div class="memory-progress-row"><span>Parejas encontradas</span><span id="memory-score">0 de 4</span></div>
+              <div class="progress-track"><div class="progress-fill" id="memory-progress"></div></div>
+            </div>
+            <button class="primary-button" id="new-cards" type="button">Nueva partida</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="cards2-view">
+        <header class="section-heading">
+          <div><p class="eyebrow">Del primero al vigésimo</p><h1>Cartas 2</h1></div>
+          <p class="section-intro">Lee el término ordinal y toca la carta que muestra su número. Los veinte términos aparecerán una vez y en orden aleatorio.</p>
+        </header>
+
+        <div class="cards2-layout">
+          <section class="cards2-board-panel" aria-live="polite">
+            <div class="cards2-board-heading"><span>Cartas abiertas</span><span>20 números</span></div>
+            <div class="cards2-grid" id="cards2-grid"></div>
+          </section>
+
+          <aside class="cards2-side">
+            <div>
+              <p class="eyebrow">Encuentra el número</p>
+              <p class="cards2-instruction">Toca la carta numérica que corresponde al término mostrado.</p>
+              <span class="cards2-prompt-label">Busca</span>
+              <p class="cards2-prompt" id="cards2-prompt">primero</p>
+              <p class="cards2-feedback" id="cards2-feedback" role="status">Selecciona una carta para comenzar.</p>
+            </div>
+
+            <div class="cards2-celebration" id="cards2-celebration" role="status">
+              <div class="fireworks" aria-hidden="true">
+                <span style="--x:-115px;--y:-90px;--delay:0s"></span>
+                <span style="--x:-82px;--y:-130px;--delay:.08s"></span>
+                <span style="--x:-38px;--y:-150px;--delay:.16s"></span>
+                <span style="--x:18px;--y:-152px;--delay:.24s"></span>
+                <span style="--x:68px;--y:-132px;--delay:.32s"></span>
+                <span style="--x:112px;--y:-96px;--delay:.4s"></span>
+                <span style="--x:128px;--y:-45px;--delay:.48s"></span>
+                <span style="--x:-128px;--y:-42px;--delay:.56s"></span>
+                <span style="--x:105px;--y:12px;--delay:.64s"></span>
+                <span style="--x:-104px;--y:14px;--delay:.72s"></span>
+                <span style="--x:62px;--y:42px;--delay:.8s"></span>
+                <span style="--x:-58px;--y:44px;--delay:.88s"></span>
+              </div>
+              <div class="celebration-art" role="img" aria-label="Personaje sonriente con ambos pulgares arriba"></div>
+              <h3>¡Ganaste!</h3>
+              <p>Relacionaste correctamente los veinte números ordinales.</p>
+            </div>
+
+            <div class="cards2-progress">
+              <div class="memory-progress-row"><span>Cartas acertadas</span><span id="cards2-score">0 de 20</span></div>
+              <div class="progress-track"><div class="progress-fill" id="cards2-progress"></div></div>
+            </div>
+            <button class="primary-button" id="restart-cards2" type="button">Reiniciar juego</button>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Números ordinales hasta el vigésimo · Segundo grado</span>
+      <span>Recurso educativo autoejecutable</span>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const unitWords = ["", "primero", "segundo", "tercero", "cuarto", "quinto", "sexto", "séptimo", "octavo", "noveno"];
+      const tensWords = ["", "décimo", "vigésimo"];
+      const unitFeminineWords = ["", "primera", "segunda", "tercera", "cuarta", "quinta", "sexta", "séptima", "octava", "novena"];
+      const tensFeminineWords = ["", "décima", "vigésima"];
+      const checkSvg = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      const xSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+      const memoryRecordKey = "ordinales-hasta-20-segundo-grado-record-v1";
+
+      function loadMemoryRecord() {
+        try {
+          const stored = Number(window.localStorage.getItem(memoryRecordKey));
+          return Number.isFinite(stored) && stored > 0 ? stored : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function saveMemoryRecord(seconds) {
+        try {
+          window.localStorage.setItem(memoryRecordKey,String(seconds));
+        } catch (error) {
+          /* El juego continúa aunque el navegador no permita guardar datos locales. */
+        }
+      }
+
+      function formatMemoryTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainder = seconds % 60;
+        return `${String(minutes).padStart(2,"0")}:${String(remainder).padStart(2,"0")}`;
+      }
+
+      function ordinalWords(number) {
+        if (!Number.isInteger(number) || number < 1 || number > 20) return "";
+        if (number === 20) return "vigésimo";
+        if (number < 10) return unitWords[number];
+        const tens = Math.floor(number / 10);
+        const unit = number % 10;
+        return unit === 0 ? tensWords[tens] : `${tensWords[tens]} ${unitWords[unit]}`;
+      }
+
+      function ordinalNotation(number) {
+        return `${number}.º`;
+      }
+
+      function ordinalFeminineWords(number) {
+        if (!Number.isInteger(number) || number < 1 || number > 20) return "";
+        if (number === 20) return "vigésima";
+        if (number < 10) return unitFeminineWords[number];
+        const tens = Math.floor(number / 10);
+        const unit = number % 10;
+        return unit === 0 ? tensFeminineWords[tens] : `${tensFeminineWords[tens]} ${unitFeminineWords[unit]}`;
+      }
+
+      function randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function shuffle(items) {
+        const copy = [...items];
+        for (let index = copy.length - 1; index > 0; index -= 1) {
+          const other = Math.floor(Math.random() * (index + 1));
+          [copy[index], copy[other]] = [copy[other], copy[index]];
+        }
+        return copy;
+      }
+
+      function uniqueNumbers(min, max, amount) {
+        const values = new Set();
+        while (values.size < amount) values.add(randomInteger(min, max));
+        return [...values];
+      }
+
+      const state = {
+        builderTens: 10,
+        builderUnit: 3,
+        problems: [],
+        problemAnswers: [],
+        problemScore: 0,
+        rankingScenarioIndex: -1,
+        tableScenarioIndex: -1,
+        tableDisplayMode: "",
+        tableModeQueue: [],
+        tableDisplayEntries: [],
+        tableQuestions: [],
+        tableAnswers: [],
+        tableScore: 0,
+        cards: [],
+        openCards: [],
+        memoryLocked: false,
+        memoryMatches: 0,
+        cardGeneration: 0,
+        memoryTimerId: null,
+        memoryStartedAt: null,
+        memoryElapsed: 0,
+        memoryRecord: loadMemoryRecord(),
+        cards2Order: [],
+        cards2Index: 0,
+        cards2Solved: [],
+        cards2Wrong: null,
+        cards2Generation: 0
+      };
+
+      const elements = {
+        tensChoices: document.querySelector("#tens-choices"),
+        unitsChoices: document.querySelector("#units-choices"),
+        builderNumber: document.querySelector("#builder-number"),
+        builderWord: document.querySelector("#builder-word"),
+        problemList: document.querySelector("#problem-list"),
+        problemScore: document.querySelector("#problem-score"),
+        problemCelebration: document.querySelector("#problem-celebration"),
+        practiceNote: document.querySelector("#practice-note"),
+        tableTitle: document.querySelector("#table-title"),
+        tableSubjectHeading: document.querySelector("#table-subject-heading"),
+        tableMetricHeading: document.querySelector("#table-metric-heading"),
+        tableOrderNote: document.querySelector("#table-order-note"),
+        tableBody: document.querySelector("#table-body"),
+        tableQuestionList: document.querySelector("#table-question-list"),
+        tableScore: document.querySelector("#table-score"),
+        tableCelebration: document.querySelector("#table-celebration"),
+        tablePracticeNote: document.querySelector("#table-practice-note"),
+        memoryDeck: document.querySelector("#memory-deck"),
+        memoryScore: document.querySelector("#memory-score"),
+        memoryProgress: document.querySelector("#memory-progress"),
+        memoryMessage: document.querySelector("#memory-message"),
+        memoryTime: document.querySelector("#memory-time"),
+        memoryRecord: document.querySelector("#memory-record"),
+        memoryCelebration: document.querySelector("#memory-celebration"),
+        memoryFinalTime: document.querySelector("#memory-final-time"),
+        cards2Grid: document.querySelector("#cards2-grid"),
+        cards2Prompt: document.querySelector("#cards2-prompt"),
+        cards2Feedback: document.querySelector("#cards2-feedback"),
+        cards2Score: document.querySelector("#cards2-score"),
+        cards2Progress: document.querySelector("#cards2-progress"),
+        cards2Celebration: document.querySelector("#cards2-celebration")
+      };
+
+      function setView(name) {
+        ["learn", "problems", "tables", "cards", "cards2"].forEach(view => {
+          document.querySelector(`#${view}-view`).classList.toggle("active", view === name);
+          document.querySelector(`#${view}-tab`).setAttribute("aria-selected", String(view === name));
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function renderBuilderChoices() {
+        const tens = [0,10];
+        elements.tensChoices.innerHTML = tens.map(value => `
+          <button class="choice-button ${state.builderTens === value ? "selected" : ""}" type="button" data-tens="${value}">${value === 0 ? "1–9" : value}</button>
+        `).join("");
+        elements.unitsChoices.innerHTML = [0,1,2,3,4,5,6,7,8,9].map(value => `
+          <button class="choice-button ${state.builderUnit === value ? "selected" : ""}" type="button" data-unit="${value}">${value}</button>
+        `).join("");
+      }
+
+      function updateBuilder() {
+        let number = state.builderTens + state.builderUnit;
+        if (number === 0) {
+          state.builderUnit = 1;
+          number = 1;
+        }
+        elements.builderNumber.textContent = ordinalNotation(number);
+        elements.builderWord.textContent = ordinalWords(number);
+        renderBuilderChoices();
+      }
+
+      const storyTemplates = [
+        (name, number) => `${name} llegó en el puesto ${number} de una carrera escolar. ¿Cómo se escribe como número ordinal el puesto obtenido?`,
+        (name, number) => `${name} ocupó el puesto ${number} en un concurso de lectura. ¿Cuál es la escritura ordinal de ese puesto?`,
+        (name, number) => `En una competencia de cálculo mental, ${name} terminó en el puesto ${number}. ¿Cómo se expresa esa posición con palabras?`,
+        (name, number) => `${name} fue la persona número ${number} en presentar su proyecto. ¿Qué número ordinal representa su turno?`,
+        (name, number) => `Durante una caminata, ${name} llegó al punto de control en el puesto ${number}. ¿Cómo se escribe ese ordinal?`,
+        (name, number) => `${name} obtuvo el puesto ${number} en una exposición de arte. ¿Cuál opción nombra correctamente esa posición?`
+      ];
+      const studentNames = ["María", "Esteban", "Valeria", "Julián", "Daniela", "Santiago", "Isabella", "Mateo"];
+      const rankingScenarios = [
+        {
+          context: "un torneo de ajedrez",
+          participants: [["Carlos",20],["Daniel",25],["Jorge",17],["Daniela",30],["Karla",24]]
+        },
+        {
+          context: "una competencia de cálculo mental",
+          participants: [["Valeria",18],["Mateo",27],["Sofía",22],["Nicolás",31],["Emma",25]]
+        },
+        {
+          context: "un concurso de lectura",
+          participants: [["Lucía",42],["Gabriel",38],["Camila",47],["Samuel",35],["Elena",44]]
+        },
+        {
+          context: "un festival deportivo",
+          participants: [["Andrés",16],["Renata",21],["Julián",19],["Paula",24],["David",18]]
+        }
+      ];
+      const tableScenarios = [
+        {
+          title: "Torneo de fútbol sala — puntos obtenidos",
+          subjectHeading: "Equipo",
+          metricHeading: "Puntos",
+          questionNoun: "equipo",
+          entries: [
+            ["Halcones","34"],["Delfines","30"],["Tigres","27"],["Colibríes","25"],
+            ["Pumas","21"],["Jaguares","18"],["Tucanes","14"],["Leones","11"]
+          ]
+        },
+        {
+          title: "Encuentro escolar de atletismo",
+          subjectHeading: "Estudiante",
+          metricHeading: "Puntos acumulados",
+          questionNoun: "estudiante",
+          entries: [
+            ["Sofía","96"],["Mateo","91"],["Valentina","87"],["Nicolás","82"],
+            ["Lucía","78"],["Emiliano","73"],["Camila","69"],["Thiago","64"]
+          ]
+        },
+        {
+          title: "Feria de proyectos científicos",
+          subjectHeading: "Proyecto",
+          metricHeading: "Puntaje",
+          questionNoun: "proyecto",
+          entries: [
+            ["Huerto escolar","98"],["Agua limpia","94"],["Energía del sol","91"],["Aves del barrio","88"],
+            ["Reciclaje creativo","85"],["Vida marina","82"],["Clima y lluvia","78"],["Semillas viajeras","74"]
+          ]
+        },
+        {
+          title: "Maratón de lectura",
+          subjectHeading: "Grupo",
+          metricHeading: "Páginas leídas",
+          questionNoun: "grupo",
+          entries: [
+            ["Colibrí","386"],["Tucán","354"],["Mariposa","329"],["Delfín","305"],
+            ["Perezoso","284"],["Jaguar","261"],["Tortuga","238"],["Manatí","215"]
+          ]
+        },
+        {
+          title: "Festival escolar de ajedrez",
+          subjectHeading: "Participante",
+          metricHeading: "Puntos",
+          questionNoun: "participante",
+          entries: [
+            ["Amanda","18"],["Sebastián","16"],["Renata","15"],["Gabriel","13"],
+            ["Elena","12"],["Martín","10"],["Paulina","9"],["Samuel","7"]
+          ]
+        }
+      ];
+
+      function makeDistractors(number) {
+        const candidates = new Set();
+        const related = [number - 1,number + 1,number - 10,number + 10,20];
+        related.forEach(value => {
+          if (value >= 1 && value <= 20 && value !== number) candidates.add(ordinalWords(value));
+        });
+        shuffle(Array.from({ length:20 },(_,index) => index + 1)).forEach(value => {
+          if (value !== number && candidates.size < 3) candidates.add(ordinalWords(value));
+        });
+        return shuffle([...candidates]).slice(0,3);
+      }
+
+      function joinScoreStatements(participants) {
+        const statements = participants.map(participant => `${participant[0]} obtuvo ${participant[1]} puntos`);
+        return `${statements.slice(0,-1).join(", ")} y ${statements[statements.length - 1]}`;
+      }
+
+      function createRankingProblem() {
+        let nextScenario = state.rankingScenarioIndex === -1
+          ? 0
+          : randomInteger(0,rankingScenarios.length - 1);
+        while (nextScenario === state.rankingScenarioIndex && rankingScenarios.length > 1) {
+          nextScenario = randomInteger(0,rankingScenarios.length - 1);
+        }
+        state.rankingScenarioIndex = nextScenario;
+        const scenario = rankingScenarios[nextScenario];
+        const ranking = [...scenario.participants].sort((first,second) => second[1] - first[1]);
+        const correct = ranking[2][0];
+        const distractors = shuffle(scenario.participants.map(participant => participant[0]).filter(name => name !== correct)).slice(0,3);
+        return {
+          text: `En ${scenario.context}, ${joinScoreStatements(scenario.participants)}. Si se ordenan los nombres del mejor al peor puntaje obtenido, ¿cuál estudiante quedará en la tercera posición?`,
+          correct,
+          options: shuffle([correct,...distractors])
+        };
+      }
+
+      function createProblemPractice() {
+        const numbers = uniqueNumbers(1,20,2);
+        if (Math.random() < .35 && !numbers.includes(20)) numbers[1] = 20;
+        const names = shuffle(studentNames).slice(0,2);
+        const templates = shuffle(storyTemplates).slice(0,2);
+        const ordinalProblems = numbers.map((number,index) => {
+          const correct = ordinalWords(number);
+          return {
+            number,
+            text: templates[index](names[index],number),
+            correct,
+            options: shuffle([correct,...makeDistractors(number)])
+          };
+        });
+        state.problems = shuffle([...ordinalProblems,createRankingProblem()]);
+        state.problemAnswers = Array(state.problems.length).fill(null);
+        state.problemScore = 0;
+        renderProblems();
+      }
+
+      function renderProblems() {
+        elements.problemList.innerHTML = state.problems.map((problem,index) => {
+          const answer = state.problemAnswers[index];
+          const feedbackClass = answer ? (answer.correct ? "correct" : "incorrect") : "";
+          const feedbackText = !answer
+            ? "Selecciona una opción."
+            : answer.correct
+              ? `${checkSvg} Respuesta correcta.`
+              : `${xSvg} La respuesta correcta es ${problem.correct}.`;
+          return `
+            <article class="problem-item">
+              <p class="problem-kicker">Ejercicio ${String(index+1).padStart(2,"0")}</p>
+              <p class="problem-text">${problem.text}</p>
+              <div class="answer-options">
+                ${problem.options.map((option,optionIndex) => {
+                  const isCorrect = Boolean(answer) && option === problem.correct;
+                  const isWrong = Boolean(answer) && answer.value === option && !answer.correct;
+                  const mark = isCorrect ? checkSvg : (isWrong ? xSvg : "");
+                  return `<button class="answer-option ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" type="button" data-problem="${index}" data-answer="${option}" ${answer ? "disabled" : ""}><span class="answer-letter">${String.fromCharCode(65+optionIndex)}</span><span>${option}</span><span class="answer-mark" aria-hidden="true">${mark}</span></button>`;
+                }).join("")}
+              </div>
+              <p class="answer-feedback ${feedbackClass}">${feedbackText}</p>
+            </article>
+          `;
+        }).join("");
+        elements.problemScore.textContent = state.problemScore;
+        const finished = state.problemAnswers.every(Boolean);
+        elements.problemCelebration.classList.toggle("visible", finished && state.problemScore === 3);
+        elements.practiceNote.classList.toggle("visible", finished && state.problemScore < 3);
+      }
+
+      function answerProblem(index,value) {
+        if (state.problemAnswers[index]) return;
+        const correct = value === state.problems[index].correct;
+        state.problemAnswers[index] = { value, correct };
+        if (correct) state.problemScore += 1;
+        renderProblems();
+      }
+
+      function createTablePractice() {
+        let nextScenario = randomInteger(0,tableScenarios.length - 1);
+        while (nextScenario === state.tableScenarioIndex && tableScenarios.length > 1) {
+          nextScenario = randomInteger(0,tableScenarios.length - 1);
+        }
+        state.tableScenarioIndex = nextScenario;
+        const scenario = tableScenarios[nextScenario];
+        const rankedEntries = [...scenario.entries].sort((first,second) => Number(second[1]) - Number(first[1]));
+        if (state.tableModeQueue.length === 0) {
+          state.tableModeQueue = shuffle(["descending","shuffled"]);
+        }
+        state.tableDisplayMode = state.tableModeQueue.pop();
+        if (state.tableDisplayMode === "descending") {
+          state.tableDisplayEntries = rankedEntries;
+        } else {
+          let mixedEntries = shuffle(rankedEntries);
+          while (mixedEntries.every((entry,index) => entry[0] === rankedEntries[index][0])) {
+            mixedEntries = shuffle(rankedEntries);
+          }
+          state.tableDisplayEntries = mixedEntries;
+        }
+
+        const positions = uniqueNumbers(1,rankedEntries.length,3);
+        const directions = shuffle([
+          "descending",
+          "ascending",
+          Math.random() < .5 ? "descending" : "ascending"
+        ]);
+        state.tableQuestions = positions.map((position,index) => {
+          const direction = directions[index];
+          const orderedEntries = direction === "descending" ? rankedEntries : [...rankedEntries].reverse();
+          const correct = orderedEntries[position - 1][0];
+          const distractors = shuffle(rankedEntries.map(entry => entry[0]).filter(name => name !== correct)).slice(0,3);
+          const directionText = direction === "descending" ? "mayor a menor" : "menor a mayor";
+          return {
+            position,
+            direction,
+            text: `De acuerdo con la información de la tabla, si se ordenan los resultados de ${directionText}, ¿qué ${scenario.questionNoun} quedará en la ${ordinalFeminineWords(position)} posición?`,
+            correct,
+            options: shuffle([correct,...distractors])
+          };
+        });
+        state.tableAnswers = Array(3).fill(null);
+        state.tableScore = 0;
+        renderTablePractice();
+      }
+
+      function renderTablePractice() {
+        const scenario = tableScenarios[state.tableScenarioIndex];
+        elements.tableTitle.textContent = scenario.title;
+        elements.tableSubjectHeading.textContent = scenario.subjectHeading;
+        elements.tableMetricHeading.textContent = scenario.metricHeading;
+        elements.tableOrderNote.textContent = state.tableDisplayMode === "descending"
+          ? "La tabla está presentada de mayor a menor. Aun así, sigue la dirección solicitada en cada pregunta."
+          : "La tabla está desordenada. Ordénala mentalmente según la dirección solicitada en cada pregunta.";
+        elements.tableOrderNote.className = `table-order-note ${state.tableDisplayMode === "shuffled" ? "shuffled" : ""}`;
+        elements.tableBody.innerHTML = state.tableDisplayEntries.map(entry => `
+          <tr><td>${entry[0]}</td><td>${entry[1]}</td></tr>
+        `).join("");
+
+        elements.tableQuestionList.innerHTML = state.tableQuestions.map((question,index) => {
+          const answer = state.tableAnswers[index];
+          const feedbackClass = answer ? (answer.correct ? "correct" : "incorrect") : "";
+          const feedbackText = !answer
+            ? "Selecciona una opción."
+            : answer.correct
+              ? `${checkSvg} Respuesta correcta.`
+              : `${xSvg} La respuesta correcta es ${question.correct}.`;
+          return `
+            <article class="problem-item">
+              <p class="problem-kicker">Pregunta ${String(index + 1).padStart(2,"0")}</p>
+              <p class="problem-text">${question.text}</p>
+              <div class="answer-options">
+                ${question.options.map((option,optionIndex) => {
+                  const isCorrect = Boolean(answer) && option === question.correct;
+                  const isWrong = Boolean(answer) && answer.value === option && !answer.correct;
+                  const mark = isCorrect ? checkSvg : (isWrong ? xSvg : "");
+                  return `<button class="answer-option ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" type="button" data-table-question="${index}" data-table-answer="${option}" ${answer ? "disabled" : ""}><span class="answer-letter">${String.fromCharCode(65 + optionIndex)}</span><span>${option}</span><span class="answer-mark" aria-hidden="true">${mark}</span></button>`;
+                }).join("")}
+              </div>
+              <p class="answer-feedback ${feedbackClass}">${feedbackText}</p>
+            </article>
+          `;
+        }).join("");
+
+        elements.tableScore.textContent = state.tableScore;
+        const finished = state.tableAnswers.every(Boolean);
+        elements.tableCelebration.classList.toggle("visible", finished && state.tableScore === 3);
+        elements.tablePracticeNote.classList.toggle("visible", finished && state.tableScore < 3);
+      }
+
+      function answerTableQuestion(index,value) {
+        if (state.tableAnswers[index]) return;
+        const correct = value === state.tableQuestions[index].correct;
+        state.tableAnswers[index] = { value, correct };
+        if (correct) state.tableScore += 1;
+        renderTablePractice();
+      }
+
+      function updateMemoryClock() {
+        elements.memoryTime.textContent = formatMemoryTime(state.memoryElapsed);
+        elements.memoryRecord.textContent = state.memoryRecord === null ? "--:--" : formatMemoryTime(state.memoryRecord);
+      }
+
+      function startMemoryTimer() {
+        if (state.memoryTimerId !== null || state.memoryMatches === 4) return;
+        state.memoryStartedAt = Date.now() - (state.memoryElapsed * 1000);
+        state.memoryTimerId = window.setInterval(() => {
+          state.memoryElapsed = Math.floor((Date.now() - state.memoryStartedAt) / 1000);
+          updateMemoryClock();
+        },250);
+      }
+
+      function stopMemoryTimer() {
+        if (state.memoryTimerId !== null) {
+          window.clearInterval(state.memoryTimerId);
+          state.memoryTimerId = null;
+        }
+        if (state.memoryStartedAt !== null) {
+          state.memoryElapsed = Math.max(1,Math.floor((Date.now() - state.memoryStartedAt) / 1000));
+        }
+        if (state.memoryRecord === null || state.memoryElapsed < state.memoryRecord) {
+          state.memoryRecord = state.memoryElapsed;
+          saveMemoryRecord(state.memoryRecord);
+        }
+        elements.memoryFinalTime.textContent = formatMemoryTime(state.memoryElapsed);
+        updateMemoryClock();
+      }
+
+      function createMemoryGame() {
+        state.cardGeneration += 1;
+        if (state.memoryTimerId !== null) window.clearInterval(state.memoryTimerId);
+        state.memoryTimerId = null;
+        state.memoryStartedAt = null;
+        state.memoryElapsed = 0;
+        const values = uniqueNumbers(1,20,4);
+        const numeric = shuffle(values.map(value => ({ key:`number-${value}`,value,type:"number",flipped:false,matched:false })));
+        const words = shuffle(values.map(value => ({ key:`word-${value}`,value,type:"word",flipped:false,matched:false })));
+        state.cards = shuffle([...numeric,...words]);
+        state.openCards = [];
+        state.memoryLocked = false;
+        state.memoryMatches = 0;
+        elements.memoryMessage.textContent = "Voltea la primera carta.";
+        elements.memoryMessage.className = "memory-message";
+        elements.memoryCelebration.classList.remove("visible");
+        updateMemoryClock();
+        renderMemory();
+      }
+
+      function cardMarkup(card) {
+        const frontValue = card.type === "number" ? ordinalNotation(card.value) : ordinalWords(card.value);
+        const corner = card.type === "number" ? ordinalNotation(card.value) : "ORD";
+        const label = card.flipped ? frontValue : "Carta oculta";
+        return `
+          <div class="memory-slot">
+            <button class="memory-card ${card.flipped ? "flipped" : ""} ${card.matched ? "matched" : ""}" type="button" data-card="${card.key}" aria-label="${label}" ${card.matched ? "disabled" : ""}>
+              <span class="card-inner">
+                <span class="card-face card-back" aria-hidden="true">º</span>
+                <span class="card-face card-front ${card.type === "number" ? "numeric" : "word"}">
+                  <span class="card-corner">${corner}</span>
+                  <span>${frontValue}</span>
+                  ${card.matched ? `<span class="matched-mark" aria-hidden="true">${checkSvg}</span>` : ""}
+                  <span class="card-corner bottom">${corner}</span>
+                </span>
+              </span>
+            </button>
+          </div>
+        `;
+      }
+
+      function renderMemory() {
+        elements.memoryDeck.innerHTML = state.cards.map(cardMarkup).join("");
+        elements.memoryScore.textContent = `${state.memoryMatches} de 4`;
+        elements.memoryProgress.style.transform = `scaleX(${state.memoryMatches/4})`;
+      }
+
+      function flipCard(key) {
+        if (state.memoryLocked) return;
+        const card = state.cards.find(item => item.key === key);
+        if (!card || card.flipped || card.matched) return;
+        startMemoryTimer();
+        card.flipped = true;
+        state.openCards.push(key);
+        renderMemory();
+
+        if (state.openCards.length === 1) {
+          elements.memoryMessage.textContent = "Ahora voltea una segunda carta del tablero.";
+          return;
+        }
+
+        state.memoryLocked = true;
+        const generation = state.cardGeneration;
+        const [first,second] = state.openCards.map(openKey => state.cards.find(item => item.key === openKey));
+        const match = first.value === second.value && first.type !== second.type;
+
+        if (match) {
+          first.matched = true;
+          second.matched = true;
+          elements.memoryMessage.textContent = `${ordinalNotation(first.value)} corresponde a ${ordinalWords(first.value)}. Las cartas se unieron.`;
+          renderMemory();
+          window.setTimeout(() => {
+            if (generation !== state.cardGeneration) return;
+            state.openCards = [];
+            state.memoryMatches += 1;
+            state.memoryLocked = false;
+            if (state.memoryMatches === 4) {
+              stopMemoryTimer();
+              elements.memoryMessage.textContent = `Encontraste las cuatro parejas en ${formatMemoryTime(state.memoryElapsed)}.`;
+              elements.memoryMessage.className = "memory-message success";
+              elements.memoryCelebration.classList.add("visible");
+            } else {
+              elements.memoryMessage.textContent = "Pareja encontrada. Queda abierta; continúa con las cartas restantes.";
+            }
+            renderMemory();
+          },560);
+        } else {
+          elements.memoryMessage.textContent = "No forman pareja. Observa antes de que vuelvan a ocultarse.";
+          window.setTimeout(() => {
+            if (generation !== state.cardGeneration) return;
+            first.flipped = false;
+            second.flipped = false;
+            state.openCards = [];
+            state.memoryLocked = false;
+            elements.memoryMessage.textContent = "Intenta de nuevo con otra pareja.";
+            renderMemory();
+          },950);
+        }
+      }
+
+      function createCards2Game() {
+        state.cards2Generation += 1;
+        state.cards2Order = shuffle(Array.from({ length:20 },(_,index) => index + 1));
+        state.cards2Index = 0;
+        state.cards2Solved = [];
+        state.cards2Wrong = null;
+        elements.cards2Feedback.textContent = "Selecciona una carta para comenzar.";
+        elements.cards2Feedback.className = "cards2-feedback";
+        elements.cards2Celebration.classList.remove("visible");
+        renderCards2();
+      }
+
+      function renderCards2() {
+        const finished = state.cards2Index === state.cards2Order.length;
+        elements.cards2Grid.innerHTML = Array.from({ length:20 },(_,index) => index + 1).map(number => {
+          const solved = state.cards2Solved.includes(number);
+          const wrong = state.cards2Wrong === number;
+          const mark = solved ? checkSvg : (wrong ? xSvg : "");
+          const status = solved ? ", acertada" : (wrong ? ", intenta de nuevo" : "");
+          return `
+            <button class="number-choice-card ${solved ? "solved" : ""} ${wrong ? "wrong" : ""}" type="button" data-cards2-number="${number}" aria-label="Carta ${ordinalNotation(number)}${status}" ${(solved || finished) ? "disabled" : ""}>
+              <span class="number-value">${ordinalNotation(number)}</span>
+              ${mark ? `<span class="solved-mark" aria-hidden="true">${mark}</span>` : ""}
+            </button>
+          `;
+        }).join("");
+
+        elements.cards2Prompt.textContent = finished ? "20 de 20" : ordinalWords(state.cards2Order[state.cards2Index]);
+        elements.cards2Score.textContent = `${state.cards2Index} de 20`;
+        elements.cards2Progress.style.transform = `scaleX(${state.cards2Index / 20})`;
+        elements.cards2Celebration.classList.toggle("visible",finished);
+      }
+
+      function answerCards2(number) {
+        if (state.cards2Index >= state.cards2Order.length || state.cards2Solved.includes(number)) return;
+        const target = state.cards2Order[state.cards2Index];
+        const generation = state.cards2Generation;
+        if (number === target) {
+          state.cards2Solved.push(number);
+          state.cards2Wrong = null;
+          state.cards2Index += 1;
+          const finished = state.cards2Index === state.cards2Order.length;
+          elements.cards2Feedback.textContent = finished
+            ? "Completaste correctamente los veinte términos ordinales."
+            : `Correcto. Ahora busca ${ordinalWords(state.cards2Order[state.cards2Index])}.`;
+          elements.cards2Feedback.className = "cards2-feedback correct";
+          renderCards2();
+          return;
+        }
+
+        state.cards2Wrong = number;
+        elements.cards2Feedback.textContent = `Esa carta no corresponde. Busca ${ordinalWords(target)}.`;
+        elements.cards2Feedback.className = "cards2-feedback incorrect";
+        renderCards2();
+        window.setTimeout(() => {
+          if (generation !== state.cards2Generation || state.cards2Wrong !== number) return;
+          state.cards2Wrong = null;
+          renderCards2();
+        },650);
+      }
+
+      document.querySelector("#learn-tab").addEventListener("click",() => setView("learn"));
+      document.querySelector("#problems-tab").addEventListener("click",() => setView("problems"));
+      document.querySelector("#tables-tab").addEventListener("click",() => setView("tables"));
+      document.querySelector("#cards-tab").addEventListener("click",() => setView("cards"));
+      document.querySelector("#cards2-tab").addEventListener("click",() => setView("cards2"));
+
+      elements.tensChoices.addEventListener("click",event => {
+        const button = event.target.closest("[data-tens]");
+        if (!button) return;
+        state.builderTens = Number(button.dataset.tens);
+        updateBuilder();
+      });
+
+      elements.unitsChoices.addEventListener("click",event => {
+        const button = event.target.closest("[data-unit]");
+        if (!button) return;
+        state.builderUnit = Number(button.dataset.unit);
+        updateBuilder();
+      });
+
+      document.querySelector("#show-vigesimo").addEventListener("click",() => {
+        elements.builderNumber.textContent = ordinalNotation(20);
+        elements.builderWord.textContent = ordinalWords(20);
+      });
+
+      elements.problemList.addEventListener("click",event => {
+        const button = event.target.closest("[data-problem]");
+        if (button) answerProblem(Number(button.dataset.problem),button.dataset.answer);
+      });
+
+      elements.tableQuestionList.addEventListener("click",event => {
+        const button = event.target.closest("[data-table-question]");
+        if (button) answerTableQuestion(Number(button.dataset.tableQuestion),button.dataset.tableAnswer);
+      });
+
+      document.querySelector("#new-problems").addEventListener("click",createProblemPractice);
+      document.querySelector("#new-table-practice").addEventListener("click",createTablePractice);
+      document.querySelector("#new-cards").addEventListener("click",createMemoryGame);
+      document.querySelector("#restart-cards2").addEventListener("click",createCards2Game);
+
+      document.querySelector("#cards-view").addEventListener("click",event => {
+        const button = event.target.closest("[data-card]");
+        if (button) flipCard(button.dataset.card);
+      });
+
+      elements.cards2Grid.addEventListener("click",event => {
+        const button = event.target.closest("[data-cards2-number]");
+        if (button) answerCards2(Number(button.dataset.cards2Number));
+      });
+
+      updateBuilder();
+      createProblemPractice();
+      createTablePractice();
+      createMemoryGame();
+      createCards2Game();
+    })();
+  </script>
+</body>
+</html>
