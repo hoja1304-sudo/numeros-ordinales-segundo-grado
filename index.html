@@ -198,6 +198,60 @@
     .lesson-panel h2 { margin-bottom: 10px; font-size: clamp(1.75rem,3vw,2.35rem); letter-spacing: -.04em; }
     .panel-intro { max-width: 58ch; color: var(--muted); font-size: clamp(1.03rem,1.6vw,1.14rem); line-height: 1.62; }
 
+    .audio-lesson {
+      margin: 24px 0;
+      padding: 20px;
+      border: 1px solid rgba(40,112,91,.22);
+      border-radius: 18px;
+      background: var(--accent-soft);
+    }
+
+    .audio-lesson-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    .audio-lesson-heading h3 { margin: 0 0 4px; font-size: 1.22rem; letter-spacing: -.02em; }
+    .audio-lesson-heading p { margin: 0; color: #4b6159; font-size: .92rem; line-height: 1.45; }
+    .audio-lesson-icon { width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: var(--accent); }
+    .audio-lesson-icon svg { width: 22px; height: 22px; }
+    .audio-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+    .audio-control {
+      min-height: 43px;
+      padding: 0 13px;
+      border: 1px solid rgba(40,112,91,.25);
+      border-radius: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: var(--accent-dark);
+      background: #fff;
+      font-weight: 780;
+      cursor: pointer;
+      transition: transform .22s var(--ease), color .22s var(--ease), background .22s var(--ease), opacity .22s var(--ease);
+    }
+
+    .audio-control svg { width: 18px; height: 18px; }
+    .audio-control:hover:not(:disabled) { color: #fff; background: var(--accent); transform: translateY(-1px); }
+    .audio-control:active:not(:disabled) { transform: scale(.97); }
+    .audio-control.stop { color: var(--danger); border-color: rgba(166,71,57,.25); }
+    .audio-control:disabled { opacity: .46; cursor: not-allowed; }
+    .audio-control[aria-pressed="true"] { color: #fff; background: var(--accent); }
+    .audio-status { min-height: 21px; margin: 13px 0 10px; color: #3f574f; font-size: .84rem; font-weight: 720; line-height: 1.45; }
+    .audio-status.error { color: var(--danger); }
+    .audio-ordinal-label { display: block; margin-bottom: 8px; color: #496057; font-size: .75rem; font-weight: 820; letter-spacing: .07em; text-transform: uppercase; }
+    .audio-ordinal-list { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 6px; }
+    .audio-ordinal-button {
+      min-height: 42px;
+      padding: 6px;
+      border: 1px solid rgba(40,112,91,.2);
+      border-radius: 10px;
+      color: var(--ink);
+      background: rgba(255,255,255,.82);
+      font: 820 .88rem/1 ui-monospace,"Cascadia Mono",monospace;
+      cursor: pointer;
+      transition: transform .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+    }
+
+    .audio-ordinal-button:hover,.audio-ordinal-button.speaking { color: #fff; background: var(--accent); transform: translateY(-1px); }
+
     .word-equation {
       margin: 25px 0;
       padding: 22px;
@@ -334,6 +388,8 @@
 
     .vigesimo-button:hover { background: #edddb9; transform: translateY(-1px); }
     .vigesimo-button:active { transform: scale(.97); }
+    .builder-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .builder-actions .vigesimo-button { margin-top: 0; }
 
     .section-heading {
       display: grid;
@@ -769,6 +825,10 @@
       .bank.units .bank-list { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .builder-top { align-items: start; flex-direction: column; }
       .builder-output { grid-template-columns: 78px 1fr; }
+      .audio-lesson-heading { align-items: center; }
+      .audio-controls { display: grid; grid-template-columns: 1fr 1fr; }
+      .audio-control:first-child { grid-column: 1 / -1; }
+      .audio-ordinal-list { grid-template-columns: repeat(4,minmax(0,1fr)); }
       .answer-options { grid-template-columns: 1fr; }
       .problem-item { padding: 16px; }
       .score-card { min-height: 340px; display: flex; border-radius: 22px; }
@@ -829,6 +889,24 @@
             <p class="eyebrow">Construcción de palabras</p>
             <h2 id="lesson-title">Unimos dos vocablos</h2>
             <p class="panel-intro">Del 11.º al 19.º unimos el décimo con una unidad ordinal. Si la unidad es cero, escribimos solamente décimo.</p>
+
+            <section class="audio-lesson" aria-labelledby="audio-lesson-title">
+              <div class="audio-lesson-heading">
+                <div>
+                  <h3 id="audio-lesson-title">Escucha y aprende</h3>
+                  <p>Escucha la explicación completa o selecciona un ordinal específico. Puedes pausar, continuar o detener la lectura.</p>
+                </div>
+                <span class="audio-lesson-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 9v6h4l5 4V5L9 9H5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M17 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+              </div>
+              <div class="audio-controls" aria-label="Controles de la lectura teórica">
+                <button class="audio-control" id="theory-audio-play" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Escuchar explicación</span></button>
+                <button class="audio-control" id="theory-audio-pause" type="button" aria-pressed="false" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="theory-audio-pause-label">Pausar</span></button>
+                <button class="audio-control stop" id="theory-audio-stop" type="button" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/></svg><span>Detener</span></button>
+              </div>
+              <p class="audio-status" id="theory-audio-status" role="status" aria-live="polite">Listo para escuchar.</p>
+              <span class="audio-ordinal-label">Escuchar un ordinal</span>
+              <div class="audio-ordinal-list" id="audio-ordinal-list"></div>
+            </section>
 
             <div class="word-equation" aria-label="Ejemplo: décimo más tercero es décimo tercero">
               <span class="word-piece">décimo</span>
@@ -891,7 +969,10 @@
                 <span class="output-number" id="builder-number">13.º</span>
                 <span class="output-word" id="builder-word">décimo tercero</span>
               </div>
-              <button class="vigesimo-button" id="show-vigesimo" type="button">Mostrar el vigésimo · 20.º</button>
+              <div class="builder-actions">
+                <button class="vigesimo-button" id="listen-builder" type="button">Escuchar el ordinal construido</button>
+                <button class="vigesimo-button" id="show-vigesimo" type="button">Mostrar el vigésimo · 20.º</button>
+              </div>
             </div>
           </section>
         </div>
@@ -1069,6 +1150,8 @@
       const checkSvg = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
       const xSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
       const memoryRecordKey = "ordinales-hasta-20-segundo-grado-record-v1";
+      const speechSupported = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+      let speechGeneration = 0;
 
       function loadMemoryRecord() {
         try {
@@ -1113,6 +1196,11 @@
         const tens = Math.floor(number / 10);
         const unit = number % 10;
         return unit === 0 ? tensFeminineWords[tens] : `${tensFeminineWords[tens]} ${unitFeminineWords[unit]}`;
+      }
+
+      function theoryNarration() {
+        const ordinalSequence = Array.from({ length:20 },(_,index) => ordinalWords(index + 1)).join(". ");
+        return `Los números ordinales indican el lugar o la posición que ocupa una persona, un objeto o un acontecimiento dentro de un orden. Del décimo primero al décimo noveno unimos la palabra décimo con una unidad ordinal. Por ejemplo, décimo más tercero forma décimo tercero. La posición veinte se llama vigésimo. Escucha los ordinales: ${ordinalSequence}.`;
       }
 
       function randomInteger(min, max) {
@@ -1201,10 +1289,94 @@
         cards2Feedback: document.querySelector("#cards2-feedback"),
         cards2Score: document.querySelector("#cards2-score"),
         cards2Progress: document.querySelector("#cards2-progress"),
-        cards2Celebration: document.querySelector("#cards2-celebration")
+        cards2Celebration: document.querySelector("#cards2-celebration"),
+        theoryAudioPlay: document.querySelector("#theory-audio-play"),
+        theoryAudioPause: document.querySelector("#theory-audio-pause"),
+        theoryAudioPauseLabel: document.querySelector("#theory-audio-pause-label"),
+        theoryAudioStop: document.querySelector("#theory-audio-stop"),
+        theoryAudioStatus: document.querySelector("#theory-audio-status"),
+        audioOrdinalList: document.querySelector("#audio-ordinal-list")
       };
 
+      function setTheoryAudioUi(mode,message) {
+        const active = mode === "loading" || mode === "speaking" || mode === "paused";
+        elements.theoryAudioPause.disabled = !active;
+        elements.theoryAudioStop.disabled = !active;
+        elements.theoryAudioPause.setAttribute("aria-pressed",String(mode === "paused"));
+        elements.theoryAudioPauseLabel.textContent = mode === "paused" ? "Continuar" : "Pausar";
+        elements.theoryAudioStatus.textContent = message;
+        elements.theoryAudioStatus.classList.toggle("error",mode === "error");
+        if (!active) document.querySelectorAll(".audio-ordinal-button.speaking").forEach(button => button.classList.remove("speaking"));
+      }
+
+      function markSpeakingOrdinal(number) {
+        document.querySelectorAll(".audio-ordinal-button").forEach(button => {
+          button.classList.toggle("speaking",Number(button.dataset.audioOrdinal) === number);
+        });
+      }
+
+      function stopTheoryAudio(announce = true) {
+        speechGeneration += 1;
+        if (speechSupported) window.speechSynthesis.cancel();
+        setTheoryAudioUi("idle",announce ? "Lectura detenida." : "Listo para escuchar.");
+      }
+
+      function speakTheoryText(text,label,ordinalNumber = null) {
+        if (!speechSupported) {
+          setTheoryAudioUi("error","Este navegador no dispone de lectura por voz.");
+          return;
+        }
+
+        const generation = ++speechGeneration;
+        window.speechSynthesis.cancel();
+        if (ordinalNumber !== null) markSpeakingOrdinal(ordinalNumber);
+        else markSpeakingOrdinal(-1);
+        setTheoryAudioUi("loading","Preparando la lectura…");
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "es-CR";
+        utterance.rate = .78;
+        utterance.pitch = 1.03;
+        const voices = window.speechSynthesis.getVoices();
+        utterance.voice = voices.find(voice => /^es-(CR|ES|MX)/i.test(voice.lang)) || voices.find(voice => /^es/i.test(voice.lang)) || null;
+        utterance.onstart = () => {
+          if (generation === speechGeneration) setTheoryAudioUi("speaking",label);
+        };
+        utterance.onpause = () => {
+          if (generation === speechGeneration) setTheoryAudioUi("paused","Lectura pausada. Pulsa Continuar para seguir.");
+        };
+        utterance.onresume = () => {
+          if (generation === speechGeneration) setTheoryAudioUi("speaking",label);
+        };
+        utterance.onend = () => {
+          if (generation === speechGeneration) setTheoryAudioUi("idle","Lectura finalizada.");
+        };
+        utterance.onerror = event => {
+          if (generation !== speechGeneration || event.error === "canceled" || event.error === "interrupted") return;
+          setTheoryAudioUi("error","No fue posible reproducir la lectura. Inténtalo nuevamente.");
+        };
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function pauseOrResumeTheoryAudio() {
+        if (!speechSupported) return;
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+          setTheoryAudioUi("speaking","Continuando la lectura…");
+        } else {
+          window.speechSynthesis.pause();
+          setTheoryAudioUi("paused","Lectura pausada. Pulsa Continuar para seguir.");
+        }
+      }
+
+      function renderAudioOrdinals() {
+        elements.audioOrdinalList.innerHTML = Array.from({ length:20 },(_,index) => index + 1).map(number => `
+          <button class="audio-ordinal-button" type="button" data-audio-ordinal="${number}" aria-label="Escuchar ${ordinalWords(number)}">${ordinalNotation(number)}</button>
+        `).join("");
+      }
+
       function setView(name) {
+        stopTheoryAudio(false);
         ["learn", "problems", "tables", "cards", "cards2"].forEach(view => {
           document.querySelector(`#${view}-view`).classList.toggle("active", view === name);
           document.querySelector(`#${view}-tab`).setAttribute("aria-selected", String(view === name));
@@ -1725,6 +1897,23 @@
         elements.builderWord.textContent = ordinalWords(20);
       });
 
+      document.querySelector("#listen-builder").addEventListener("click",() => {
+        const word = elements.builderWord.textContent.trim();
+        speakTheoryText(word,`Escuchando: ${word}.`);
+      });
+
+      elements.theoryAudioPlay.addEventListener("click",() => {
+        speakTheoryText(theoryNarration(),"Escuchando la explicación completa.");
+      });
+      elements.theoryAudioPause.addEventListener("click",pauseOrResumeTheoryAudio);
+      elements.theoryAudioStop.addEventListener("click",() => stopTheoryAudio(true));
+      elements.audioOrdinalList.addEventListener("click",event => {
+        const button = event.target.closest("[data-audio-ordinal]");
+        if (!button) return;
+        const number = Number(button.dataset.audioOrdinal);
+        speakTheoryText(ordinalWords(number),`Escuchando: ${ordinalWords(number)}.`,number);
+      });
+
       elements.problemList.addEventListener("click",event => {
         const button = event.target.closest("[data-problem]");
         if (button) answerProblem(Number(button.dataset.problem),button.dataset.answer);
@@ -1751,10 +1940,18 @@
       });
 
       updateBuilder();
+      renderAudioOrdinals();
+      if (!speechSupported) {
+        elements.theoryAudioPlay.disabled = true;
+        setTheoryAudioUi("error","Este navegador no dispone de lectura por voz.");
+      } else {
+        window.speechSynthesis.getVoices();
+      }
       createProblemPractice();
       createTablePractice();
       createMemoryGame();
       createCards2Game();
+      window.addEventListener("beforeunload",() => stopTheoryAudio(false));
     })();
   </script>
 </body>
