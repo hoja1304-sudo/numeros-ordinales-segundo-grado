@@ -407,6 +407,14 @@
     .answer-feedback.correct { color: var(--accent-dark); }
     .answer-feedback.incorrect { color: var(--danger); }
     .correct-emoji { margin-right: 4px; font-size: 1.15em; vertical-align: -.08em; }
+    .answer-feedback.correct,.success-burst { position: relative; }
+    .answer-feedback.correct::after,.success-burst::after { position: absolute; left: 25px; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: #a8792c; box-shadow: -30px -15px #a8792c,-16px -25px #28705b,3px -29px #d99a43,21px -21px #28705b,31px -4px #a8792c,27px 17px #d99a43,8px 27px #28705b,-15px 24px #a8792c,-30px 10px #d99a43; opacity: 0; pointer-events: none; content: ""; animation: correct-fireworks .9s cubic-bezier(.16,1,.3,1) both; }
+
+    @keyframes correct-fireworks {
+      0% { opacity: 0; transform: translate(-50%,-50%) scale(.12); }
+      22% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(1.15); }
+    }
 
     .score-card {
       min-height: 390px;
@@ -456,6 +464,8 @@
     }
 
     .celebration-art {
+      position: relative;
+      isolation: isolate;
       width: 190px;
       height: 160px;
       margin: 0 auto 6px;
@@ -467,7 +477,15 @@
       filter: drop-shadow(0 15px 16px rgba(99,74,20,.14));
     }
 
-    .celebration-art::before { content: "🥳"; }
+    .celebration-art::before { position: relative; z-index: 1; content: "🥳"; }
+    .celebration-art::after { position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; border-radius: 50%; background: #e4bd70; box-shadow: -78px -38px #e4bd70,-43px -62px #9dcbbb,4px -70px #fff,51px -56px #d99a43,82px -27px #9dcbbb,86px 21px #e4bd70,54px 56px #fff,8px 69px #d99a43,-42px 60px #9dcbbb,-80px 32px #fff,-90px -2px #d99a43,37px 25px #e4bd70; opacity: 0; pointer-events: none; content: ""; }
+    .visible .celebration-art::after { animation: emoji-fireworks 1.35s cubic-bezier(.16,1,.3,1) infinite; }
+
+    @keyframes emoji-fireworks {
+      0% { opacity: 0; transform: translate(-50%,-50%) scale(.16) rotate(-5deg); }
+      18% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(1.22) rotate(7deg); }
+    }
 
     .problem-celebration h3 { margin-bottom: 4px; font-size: 1.25rem; }
     .problem-celebration p { margin: 0; color: #b8c4bf; font-size: .8rem; line-height: 1.45; }
@@ -1110,6 +1128,12 @@
         return copy;
       }
 
+      function triggerSuccessBurst(element) {
+        element.classList.remove("success-burst");
+        void element.offsetWidth;
+        element.classList.add("success-burst");
+      }
+
       function uniqueNumbers(min, max, amount) {
         const values = new Set();
         while (values.size < amount) values.add(randomInteger(min, max));
@@ -1583,6 +1607,7 @@
           first.matched = true;
           second.matched = true;
           elements.memoryMessage.textContent = `🥳 ${ordinalNotation(first.value)} corresponde a ${ordinalWords(first.value)}. Las cartas se unieron.`;
+          triggerSuccessBurst(elements.memoryMessage);
           renderMemory();
           window.setTimeout(() => {
             if (generation !== state.cardGeneration) return;
@@ -1660,6 +1685,7 @@
             : `🥳 Correcto. Ahora busca ${ordinalWords(state.cards2Order[state.cards2Index])}.`;
           elements.cards2Feedback.className = "cards2-feedback correct";
           renderCards2();
+          triggerSuccessBurst(elements.cards2Feedback);
           return;
         }
 
