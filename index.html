@@ -738,6 +738,31 @@
     .cards2-instruction { margin-bottom: 10px; color: #b9c4c0; font-size: .96rem; line-height: 1.55; }
     .cards2-prompt-label { display: block; margin: 18px 0 8px; color: #9dcbbb; font-size: .72rem; font-weight: 820; letter-spacing: .08em; text-transform: uppercase; }
     .cards2-prompt { min-height: 76px; margin: 0; color: #fff; font-size: clamp(1.8rem,4vw,2.65rem); font-weight: 790; line-height: 1.04; letter-spacing: -.045em; overflow-wrap: anywhere; }
+    .cards2-audio-controls { margin-top: 13px; display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .cards2-audio-button {
+      min-height: 44px;
+      padding: 0 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: #dce6e2;
+      background: rgba(255,255,255,.06);
+      font-size: .79rem;
+      font-weight: 780;
+      cursor: pointer;
+      transition: transform .22s var(--ease), border-color .22s var(--ease), color .22s var(--ease), background .22s var(--ease), opacity .22s var(--ease);
+    }
+    .cards2-audio-button svg { width: 18px; height: 18px; flex: 0 0 18px; }
+    .cards2-audio-button:hover:not(:disabled) { border-color: #9dcbbb; color: #fff; background: rgba(157,203,187,.15); transform: translateY(-1px); }
+    .cards2-audio-button:active:not(:disabled) { transform: scale(.97); }
+    .cards2-audio-button[aria-pressed="true"] { border-color: #9dcbbb; color: var(--ink); background: #b7dfd0; }
+    .cards2-audio-button.repeat { width: 44px; padding: 0; }
+    .cards2-audio-button.repeat.speaking { color: var(--ink); background: #b7dfd0; }
+    .cards2-audio-button:disabled { opacity: .42; cursor: not-allowed; }
+    .cards2-audio-status { min-height: 19px; margin: 7px 0 0; color: #9fb0aa; font-size: .72rem; line-height: 1.4; }
     .cards2-feedback { min-height: 47px; margin: 13px 0 0; color: #bcc7c3; font-size: .88rem; line-height: 1.5; }
     .cards2-feedback.correct { color: #b7dfd0; font-weight: 760; }
     .cards2-feedback.incorrect { color: #f0b6ad; font-weight: 760; }
@@ -1100,6 +1125,17 @@
               <p class="cards2-instruction">Toca la carta numérica que corresponde al término mostrado.</p>
               <span class="cards2-prompt-label">Busca</span>
               <p class="cards2-prompt" id="cards2-prompt">primero</p>
+              <div class="cards2-audio-controls" aria-label="Controles de audio de Cartas 2">
+                <button class="cards2-audio-button" id="cards2-audio-toggle" type="button" aria-pressed="true">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M17 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  <span id="cards2-audio-toggle-label" aria-live="polite">Audio activado</span>
+                </button>
+                <button class="cards2-audio-button repeat" id="cards2-audio-repeat" type="button" aria-label="Repetir el ordinal solicitado" title="Repetir el ordinal solicitado">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.34-5.66L4 8.67" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 4v4.67h4.67" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 9v6l5-3-5-3Z" fill="currentColor"/></svg>
+                  <span class="sr-only">Repetir audio</span>
+                </button>
+              </div>
+              <p class="cards2-audio-status" id="cards2-audio-status" role="status" aria-live="polite">La voz indicará cada ordinal.</p>
               <p class="cards2-feedback" id="cards2-feedback" role="status">Selecciona una carta para comenzar.</p>
             </div>
 
@@ -1152,6 +1188,7 @@
       const memoryRecordKey = "ordinales-hasta-20-segundo-grado-record-v1";
       const speechSupported = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
       let speechGeneration = 0;
+      let cards2SpeechGeneration = 0;
 
       function loadMemoryRecord() {
         try {
@@ -1234,7 +1271,6 @@
         problems: [],
         problemAnswers: [],
         problemScore: 0,
-        rankingScenarioIndex: -1,
         tableScenarioIndex: -1,
         tableDisplayMode: "",
         tableModeQueue: [],
@@ -1255,7 +1291,8 @@
         cards2Index: 0,
         cards2Solved: [],
         cards2Wrong: null,
-        cards2Generation: 0
+        cards2Generation: 0,
+        cards2AudioEnabled: true
       };
 
       const elements = {
@@ -1290,6 +1327,10 @@
         cards2Score: document.querySelector("#cards2-score"),
         cards2Progress: document.querySelector("#cards2-progress"),
         cards2Celebration: document.querySelector("#cards2-celebration"),
+        cards2AudioToggle: document.querySelector("#cards2-audio-toggle"),
+        cards2AudioToggleLabel: document.querySelector("#cards2-audio-toggle-label"),
+        cards2AudioRepeat: document.querySelector("#cards2-audio-repeat"),
+        cards2AudioStatus: document.querySelector("#cards2-audio-status"),
         theoryAudioPlay: document.querySelector("#theory-audio-play"),
         theoryAudioPause: document.querySelector("#theory-audio-pause"),
         theoryAudioPauseLabel: document.querySelector("#theory-audio-pause-label"),
@@ -1369,6 +1410,84 @@
         }
       }
 
+      function stopCards2Speech(message = null) {
+        cards2SpeechGeneration += 1;
+        if (speechSupported) window.speechSynthesis.cancel();
+        elements.cards2AudioRepeat.classList.remove("speaking");
+        if (message !== null) elements.cards2AudioStatus.textContent = message;
+      }
+
+      function updateCards2AudioUi(message = null) {
+        const enabled = speechSupported && state.cards2AudioEnabled;
+        const finished = state.cards2Order.length > 0 && state.cards2Index === state.cards2Order.length;
+        elements.cards2AudioToggle.disabled = !speechSupported;
+        elements.cards2AudioToggle.setAttribute("aria-pressed",String(enabled));
+        elements.cards2AudioToggleLabel.textContent = !speechSupported
+          ? "Audio no disponible"
+          : enabled
+            ? "Audio activado"
+            : "Audio desactivado";
+        elements.cards2AudioRepeat.disabled = !enabled || finished;
+        if (message !== null) {
+          elements.cards2AudioStatus.textContent = message;
+        } else if (!speechSupported) {
+          elements.cards2AudioStatus.textContent = "Este navegador no dispone de lectura por voz.";
+        } else if (!enabled) {
+          elements.cards2AudioStatus.textContent = "Audio desactivado.";
+        } else if (finished) {
+          elements.cards2AudioStatus.textContent = "Juego completado.";
+        } else {
+          elements.cards2AudioStatus.textContent = "La voz indicará cada ordinal.";
+        }
+      }
+
+      function speakCards2Prompt() {
+        const finished = state.cards2Index >= state.cards2Order.length;
+        if (!speechSupported || !state.cards2AudioEnabled || finished) {
+          updateCards2AudioUi();
+          return;
+        }
+
+        const number = state.cards2Order[state.cards2Index];
+        const word = ordinalWords(number);
+        const generation = ++cards2SpeechGeneration;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(`Busca ${word}. Marca la carta que muestra su número.`);
+        utterance.lang = "es-CR";
+        utterance.rate = .78;
+        utterance.pitch = 1.03;
+        const voices = window.speechSynthesis.getVoices();
+        utterance.voice = voices.find(voice => /^es-(CR|ES|MX)/i.test(voice.lang)) || voices.find(voice => /^es/i.test(voice.lang)) || null;
+        utterance.onstart = () => {
+          if (generation !== cards2SpeechGeneration) return;
+          elements.cards2AudioRepeat.classList.add("speaking");
+          updateCards2AudioUi(`Escuchando: ${word}.`);
+        };
+        utterance.onend = () => {
+          if (generation !== cards2SpeechGeneration) return;
+          elements.cards2AudioRepeat.classList.remove("speaking");
+          updateCards2AudioUi("Audio listo. Puedes repetir la indicación.");
+        };
+        utterance.onerror = event => {
+          if (generation !== cards2SpeechGeneration || event.error === "canceled" || event.error === "interrupted") return;
+          elements.cards2AudioRepeat.classList.remove("speaking");
+          updateCards2AudioUi("No fue posible reproducir la indicación.");
+        };
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function toggleCards2Audio() {
+        if (!speechSupported) return;
+        state.cards2AudioEnabled = !state.cards2AudioEnabled;
+        if (!state.cards2AudioEnabled) {
+          stopCards2Speech("Audio desactivado.");
+          updateCards2AudioUi();
+          return;
+        }
+        updateCards2AudioUi("Audio activado.");
+        speakCards2Prompt();
+      }
+
       function renderAudioOrdinals() {
         elements.audioOrdinalList.innerHTML = Array.from({ length:20 },(_,index) => index + 1).map(number => `
           <button class="audio-ordinal-button" type="button" data-audio-ordinal="${number}" aria-label="Escuchar ${ordinalWords(number)}">${ordinalNotation(number)}</button>
@@ -1377,10 +1496,12 @@
 
       function setView(name) {
         stopTheoryAudio(false);
+        stopCards2Speech();
         ["learn", "problems", "tables", "cards", "cards2"].forEach(view => {
           document.querySelector(`#${view}-view`).classList.toggle("active", view === name);
           document.querySelector(`#${view}-tab`).setAttribute("aria-selected", String(view === name));
         });
+        if (name === "cards2") speakCards2Prompt();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
@@ -1414,23 +1535,17 @@
         (name, number) => `${name} obtuvo el puesto ${number} en una exposición de arte. ¿Cuál opción nombra correctamente esa posición?`
       ];
       const studentNames = ["María", "Esteban", "Valeria", "Julián", "Daniela", "Santiago", "Isabella", "Mateo"];
-      const rankingScenarios = [
-        {
-          context: "un torneo de ajedrez",
-          participants: [["Carlos",20],["Daniel",25],["Jorge",17],["Daniela",30],["Karla",24]]
-        },
-        {
-          context: "una competencia de cálculo mental",
-          participants: [["Valeria",18],["Mateo",27],["Sofía",22],["Nicolás",31],["Emma",25]]
-        },
-        {
-          context: "un concurso de lectura",
-          participants: [["Lucía",42],["Gabriel",38],["Camila",47],["Samuel",35],["Elena",44]]
-        },
-        {
-          context: "un festival deportivo",
-          participants: [["Andrés",16],["Renata",21],["Julián",19],["Paula",24],["David",18]]
-        }
+      const racePairs = [
+        ["Karla","Jorge"],
+        ["Valeria","Mateo"],
+        ["Daniela","Santiago"],
+        ["Isabella","Esteban"]
+      ];
+      const raceContexts = [
+        "una maratón realizada en Costa Rica",
+        "una carrera recreativa de su comunidad",
+        "una competencia de campo traviesa",
+        "una carrera escolar"
       ];
       const tableScenarios = [
         {
@@ -1497,45 +1612,52 @@
         return shuffle([...candidates]).slice(0,3);
       }
 
-      function joinScoreStatements(participants) {
-        const statements = participants.map(participant => `${participant[0]} obtuvo ${participant[1]} puntos`);
-        return `${statements.slice(0,-1).join(", ")} y ${statements[statements.length - 1]}`;
+      function createRacePositionProblem() {
+        const [runner,friend] = racePairs[randomInteger(0,racePairs.length - 1)];
+        const context = raceContexts[randomInteger(0,raceContexts.length - 1)];
+        const friendPosition = randomInteger(12,15);
+        const placesMoved = randomInteger(2,5);
+        const placesBefore = Math.random() < .5;
+        const runnerPosition = placesBefore ? friendPosition - placesMoved : friendPosition + placesMoved;
+        const oppositePosition = placesBefore ? friendPosition + placesMoved : friendPosition - placesMoved;
+        const relation = placesBefore ? "antes" : "después";
+        const optionPositions = [friendPosition,oppositePosition,runnerPosition,placesMoved];
+        return {
+          number: runnerPosition,
+          text: `${runner} participó en ${context}. Al llegar a la meta, se ubicó ${placesMoved} puestos ${relation} de ${friend}, quien llegó en el puesto ${friendPosition}. ¿Cuál fue el puesto que ocupó ${runner} al llegar a la meta?`,
+          correct: ordinalWords(runnerPosition),
+          options: shuffle(optionPositions.map(ordinalWords))
+        };
       }
 
-      function createRankingProblem() {
-        let nextScenario = state.rankingScenarioIndex === -1
-          ? 0
-          : randomInteger(0,rankingScenarios.length - 1);
-        while (nextScenario === state.rankingScenarioIndex && rankingScenarios.length > 1) {
-          nextScenario = randomInteger(0,rankingScenarios.length - 1);
-        }
-        state.rankingScenarioIndex = nextScenario;
-        const scenario = rankingScenarios[nextScenario];
-        const ranking = [...scenario.participants].sort((first,second) => second[1] - first[1]);
-        const correct = ranking[2][0];
-        const distractors = shuffle(scenario.participants.map(participant => participant[0]).filter(name => name !== correct)).slice(0,3);
+      function createElevatorProblem() {
+        const startingFloor = randomInteger(11,15);
+        const floorsMoved = randomInteger(2,5);
+        const goesUp = Math.random() < .5;
+        const destinationFloor = goesUp ? startingFloor + floorsMoved : startingFloor - floorsMoved;
+        const oppositeFloor = goesUp ? startingFloor - floorsMoved : startingFloor + floorsMoved;
+        const action = goesUp ? "asciende" : "desciende";
+        const optionFloors = [startingFloor,oppositeFloor,destinationFloor,floorsMoved];
         return {
-          text: `En ${scenario.context}, ${joinScoreStatements(scenario.participants)}. Si se ordenan los nombres del mejor al peor puntaje obtenido, ¿cuál estudiante quedará en la tercera posición?`,
-          correct,
-          options: shuffle([correct,...distractors])
+          number: destinationFloor,
+          text: `Manuel está en el piso ${startingFloor} de un edificio. Entra al ascensor y ${action} ${floorsMoved} pisos. ¿En cuál piso se ubica Manuel después de salir del ascensor?`,
+          correct: ordinalWords(destinationFloor),
+          options: shuffle(optionFloors.map(ordinalWords))
         };
       }
 
       function createProblemPractice() {
-        const numbers = uniqueNumbers(1,20,2);
-        if (Math.random() < .35 && !numbers.includes(20)) numbers[1] = 20;
-        const names = shuffle(studentNames).slice(0,2);
-        const templates = shuffle(storyTemplates).slice(0,2);
-        const ordinalProblems = numbers.map((number,index) => {
-          const correct = ordinalWords(number);
-          return {
-            number,
-            text: templates[index](names[index],number),
-            correct,
-            options: shuffle([correct,...makeDistractors(number)])
-          };
-        });
-        state.problems = shuffle([...ordinalProblems,createRankingProblem()]);
+        const number = Math.random() < .25 ? 20 : randomInteger(1,19);
+        const name = studentNames[randomInteger(0,studentNames.length - 1)];
+        const template = storyTemplates[randomInteger(0,storyTemplates.length - 1)];
+        const correct = ordinalWords(number);
+        const ordinalProblem = {
+          number,
+          text: template(name,number),
+          correct,
+          options: shuffle([correct,...makeDistractors(number)])
+        };
+        state.problems = [ordinalProblem,createRacePositionProblem(),createElevatorProblem()];
         state.problemAnswers = Array(state.problems.length).fill(null);
         state.problemScore = 0;
         renderProblems();
@@ -1811,6 +1933,7 @@
       }
 
       function createCards2Game() {
+        stopCards2Speech();
         state.cards2Generation += 1;
         state.cards2Order = shuffle(Array.from({ length:20 },(_,index) => index + 1));
         state.cards2Index = 0;
@@ -1820,6 +1943,7 @@
         elements.cards2Feedback.className = "cards2-feedback";
         elements.cards2Celebration.classList.remove("visible");
         renderCards2();
+        if (document.querySelector("#cards2-view").classList.contains("active")) speakCards2Prompt();
       }
 
       function renderCards2() {
@@ -1841,6 +1965,7 @@
         elements.cards2Score.textContent = `${state.cards2Index} de 20`;
         elements.cards2Progress.style.transform = `scaleX(${state.cards2Index / 20})`;
         elements.cards2Celebration.classList.toggle("visible",finished);
+        updateCards2AudioUi();
       }
 
       function answerCards2(number) {
@@ -1858,6 +1983,8 @@
           elements.cards2Feedback.className = "cards2-feedback correct";
           renderCards2();
           triggerSuccessBurst(elements.cards2Feedback);
+          if (finished) stopCards2Speech("Juego completado.");
+          else speakCards2Prompt();
           return;
         }
 
@@ -1865,6 +1992,7 @@
         elements.cards2Feedback.textContent = `Esa carta no corresponde. Busca ${ordinalWords(target)}.`;
         elements.cards2Feedback.className = "cards2-feedback incorrect";
         renderCards2();
+        speakCards2Prompt();
         window.setTimeout(() => {
           if (generation !== state.cards2Generation || state.cards2Wrong !== number) return;
           state.cards2Wrong = null;
@@ -1913,6 +2041,8 @@
         const number = Number(button.dataset.audioOrdinal);
         speakTheoryText(ordinalWords(number),`Escuchando: ${ordinalWords(number)}.`,number);
       });
+      elements.cards2AudioToggle.addEventListener("click",toggleCards2Audio);
+      elements.cards2AudioRepeat.addEventListener("click",speakCards2Prompt);
 
       elements.problemList.addEventListener("click",event => {
         const button = event.target.closest("[data-problem]");
@@ -1943,6 +2073,7 @@
       renderAudioOrdinals();
       if (!speechSupported) {
         elements.theoryAudioPlay.disabled = true;
+        state.cards2AudioEnabled = false;
         setTheoryAudioUi("error","Este navegador no dispone de lectura por voz.");
       } else {
         window.speechSynthesis.getVoices();
@@ -1951,7 +2082,10 @@
       createTablePractice();
       createMemoryGame();
       createCards2Game();
-      window.addEventListener("beforeunload",() => stopTheoryAudio(false));
+      window.addEventListener("beforeunload",() => {
+        stopTheoryAudio(false);
+        stopCards2Speech();
+      });
     })();
   </script>
 </body>
