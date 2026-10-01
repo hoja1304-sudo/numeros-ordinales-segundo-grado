@@ -882,6 +882,7 @@
     .authorship span { display: block; }
     .authorship strong { color: var(--ink); font-weight: 850; }
   </style>
+<script>/* voz en espanol neutro (seseo) - regla AGENTS */(function(){if(!window.SpeechSynthesisUtterance||window.__seseo)return;window.__seseo=1;function s(t){return t==null?t:(""+t).replace(/z/g,"s").replace(/Z/g,"S").replace(/c(?=[eiéíEIÉÍ])/g,"s").replace(/C(?=[eiéíEIÉÍ])/g,"S");}try{var p=SpeechSynthesisUtterance.prototype,d=Object.getOwnPropertyDescriptor(p,"text");if(d&&d.set&&d.get){Object.defineProperty(p,"text",{configurable:true,enumerable:d.enumerable,get:d.get,set:function(v){d.set.call(this,s(v));}});}}catch(e){}var O=window.SpeechSynthesisUtterance;function N(t){return arguments.length?new O(s(t)):new O();}N.prototype=O.prototype;try{window.SpeechSynthesisUtterance=N;}catch(e){}})();</script>
 </head>
 <body>
   <div class="app-shell">
